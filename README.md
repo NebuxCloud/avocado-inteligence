@@ -5,6 +5,23 @@
 </div>
 AvocadoIntelligence is a SwiftUI application that aims to bring intelligent functionalities to iOS users. This guide will help you compile the project using Xcode.
 
+## Features
+
+AvocadoIntelligence offers a range of advanced features designed to enhance the user experience with intelligent text generation. These features have been tested on devices starting from the iPhone 13 Pro and work across any iOS version in any region, supporting both English and Spanish languages. While testing has primarily been conducted on iPhone 13 Pro and newer devices, it may also work on earlier versions of iPhone.
+
+- **Summarize URLs in Spanish:** Generate concise summaries from web links in Spanish. [Watch demo](https://youtube.com/shorts/zxvDh6J-6qM)
+- **Summarize URLs in English:** Extract key points from web links in English. [Watch demo](https://youtube.com/shorts/Szu7mtuekFY)
+- **Romanticize Spanish text:** Add a romantic flair to your Spanish writings. [Watch demo](https://youtube.com/shorts/b8nXXE6m7rE)
+- **Romanticize English text:** Transform English text with a romantic style. [Watch demo](https://youtube.com/shorts/4jMdMYGzus4)
+- **Professionalize Spanish text:** Elevate your Spanish content to a professional tone. [Watch demo](https://youtube.com/shorts/4wj_EEkfBVs)
+- **Professionalize English text:** Improve English text by giving it a more formal, professional voice. [Watch demo](https://youtube.com/shorts/Y2nkhM59aj0?feature=share)
+
+Each feature works seamlessly on devices running iOS in any region (not restricted to the USA) and offers multilingual support (English and Spanish).
+
+### Model
+
+- Gemma 2b IT
+
 ## How to Compile AvocadoIntelligence in Xcode
 
 ### 1. Open Xcode
