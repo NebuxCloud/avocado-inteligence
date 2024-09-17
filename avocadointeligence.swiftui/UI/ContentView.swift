@@ -29,11 +29,8 @@ struct ContentView: View {
                 if let sharedSummary = sharedDefaults?.string(forKey: "sharedSummary") {
                     self.userInput = sharedSummary
                 }
-                
             }
             observeKeyboard()
-            
-
         }
         .onDisappear {
             removeKeyboardObservers()
@@ -82,26 +79,33 @@ struct ContentView: View {
     private func RewrittenTextView(geometry: GeometryProxy) -> some View {
         ScrollViewReader { scrollView in
             ScrollView {
-                GlassButton(text: "Copy", icon: "doc.on.doc") {
-                    UIPasteboard.general.string = result
-                }
-                Text(.init(result))
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.white.opacity(0.25))
-                    .font(.system(size: 17))
-                    .cornerRadius(15)
-                    .onChange(of: result) { _ in
-                        withAnimation {
-                            scrollView.scrollTo(result, anchor: .bottom)
-                        }
+                VStack(alignment: .leading, spacing: 10) {
+                    GlassButton(text: "Copy", icon: "doc.on.doc") {
+                        UIPasteboard.general.string = result
                     }
+                    
+                    Text(result)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.white.opacity(0.25))
+                        .font(.system(size: 17))
+                        .cornerRadius(15)
+                    
+                    Color.clear
+                        .frame(height: 1)
+                        .id("bottom")
+                }
+                .padding()
             }
             .frame(maxHeight: geometry.size.height * 0.7)
+            .onChange(of: result) { _ in
+                withAnimation {
+                    scrollView.scrollTo("bottom", anchor: .bottom)
+                }
+            }
         }
         .transition(.move(edge: .top))
-        .animation(.easeInOut)
-        .padding(.horizontal)
+        .animation(.easeInOut, value: result)
     }
 
     @ViewBuilder
@@ -237,20 +241,57 @@ struct ContentView: View {
             return "Error downloading HTML: \(error.localizedDescription)"
         }
     }
+    
+    func countWords(in text: String) -> Int {
+        let words = text.components(separatedBy: CharacterSet.whitespacesAndNewlines)
+                          .filter { !$0.isEmpty }
+        return words.count
+    }
 
     func htmlToPlainText(_ html: String) -> String {
-        guard let data = html.data(using: .utf8) else { return "" }
+        // Convert the HTML string to UTF-8 data
+        guard let data = html.data(using: .utf8) else {
+            print("Error: Could not convert HTML to UTF-8 data.")
+            return ""
+        }
+        
+        // Options for parsing the HTML
         let options: [NSAttributedString.DocumentReadingOptionKey: Any] = [
             .documentType: NSAttributedString.DocumentType.html,
             .characterEncoding: String.Encoding.utf8.rawValue
         ]
-        if let attributedString = try? NSAttributedString(data: data, options: options, documentAttributes: nil) {
+        
+        do {
+            // Create an NSAttributedString from the HTML data
+            let attributedString = try NSAttributedString(data: data, options: options, documentAttributes: nil)
             let plainText = attributedString.string
-            let lines = plainText.split(separator: "\n").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            let paragraphs = lines.filter { !$0.isEmpty && $0.split(separator: " ").count > 1 }
-            return paragraphs.joined(separator: "\n\n")
-        } else {
-            return "Error stripping HTML tags."
+            
+            // Normalize line breaks
+            let normalizedText = plainText
+                .replacingOccurrences(of: "\r\n", with: "\n")
+                .replacingOccurrences(of: "\r", with: "\n")
+            
+            // Split text into paragraphs based on two or more line breaks
+            let paragraphSeparator = "\n\n"
+            let paragraphs = normalizedText.components(separatedBy: paragraphSeparator)
+            
+            print("Total paragraphs found: \(paragraphs.count)")
+            
+            // Filter paragraphs with more than 10 words
+            let filteredParagraphs = paragraphs.filter { paragraph in
+                let wordCount = countWords(in: paragraph)
+                print("Paragraph (\(wordCount) words): \(paragraph)")
+                return wordCount > 20
+            }
+            
+            print("Total paragraphs after filtering: \(filteredParagraphs.count)")
+            
+            // Join filtered paragraphs with two line breaks between them
+            return filteredParagraphs.joined(separator: "\n\n")
+            
+        } catch {
+            print("Error processing HTML: \(error.localizedDescription)")
+            return "Error processing HTML."
         }
     }
 
