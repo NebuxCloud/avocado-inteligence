@@ -10,6 +10,7 @@
 
 AvocadoIntelligence offers a range of advanced features designed to enhance the user experience with intelligent text generation. These features have been tested on devices starting from the iPhone 13 Pro and work across any iOS version in any region, supporting both English and Spanish languages. While testing has primarily been conducted on iPhone 13 Pro and newer devices, it may also work on earlier versions of iPhone.
 
+- Everything is running locally on the device, ensuring user privacy and data security.
 - **Summarize URLs in Spanish:** Generate concise summaries from web links in Spanish. [Watch demo](https://youtube.com/shorts/zxvDh6J-6qM)
 - **Summarize URLs in English:** Extract key points from web links in English. [Watch demo](https://youtube.com/shorts/Szu7mtuekFY)
 - **Romanticize Spanish text:** Add a romantic flair to your Spanish writings. [Watch demo](https://youtube.com/shorts/b8nXXE6m7rE)
