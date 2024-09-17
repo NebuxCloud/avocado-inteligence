@@ -3,7 +3,8 @@
 <div align="center">
     <img src="avocadointeligence.swiftui/Assets.xcassets/AppIcon.appiconset/appstore.png" alt="App Logo" width="150"/>
 </div>
-AvocadoIntelligence is a SwiftUI application that aims to bring intelligent functionalities to iOS users. This guide will help you compile the project using Xcode.
+
+**AvocadoIntelligence** is a SwiftUI application created by [NebuxCloud](https://nebux.cloud), a company specializing in AI and SRE solutions. This application aims to bring intelligent functionalities to iOS users. This guide will help you compile the project using Xcode.
 
 ## Features
 
