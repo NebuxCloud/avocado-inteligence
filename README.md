@@ -1,6 +1,6 @@
 # AvocadoIntelligence
 
-![App Logo](avocadointeligence.swiftui/Assets.xcassets/AppIcon.appiconset/appstore.png)
+<img src="avocadointeligence.swiftui/Assets.xcassets/AppIcon.appiconset/appstore.png" alt="App Logo" width="150"/>
 
 AvocadoIntelligence is a SwiftUI application that aims to bring intelligent functionalities to iOS users. This guide will help you compile the project using Xcode.
 
