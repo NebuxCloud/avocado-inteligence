@@ -103,16 +103,8 @@
 		8A3F84102AC4BD85005E2EE8 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8A3F84112AC4BD8C005E2EE8 /* models */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		8A3F84112AC4BD8C005E2EE8 /* models */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = models;
 			sourceTree = "<group>";
 		};
 		8A907F312AC7134E006146EA /* llama.cpp.swift */ = {
