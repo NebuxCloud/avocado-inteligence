@@ -1,4 +1,4 @@
-# AvocadoIntelligence
+# AvocadoIntelligence (A.I.)
 
 <div align="center">
     <img src="avocadointeligence.swiftui/Assets.xcassets/AppIcon.appiconset/appstore.png" alt="App Logo" width="150"/>
