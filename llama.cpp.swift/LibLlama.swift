@@ -53,10 +53,9 @@ actor LlamaContext {
         llama_sampler_chain_add(self.sampling, llama_sampler_init_dist(1234))
         
         
-        // Parámetros para las penalizaciones de tokens
-        let n_vocab: Int32 = llama_n_vocab(context) // Obtén el tamaño del vocabulario
-        let special_eos_id: llama_token = llama_token_eos(context) // Token de fin de secuencia
-        let linefeed_id: llama_token = llama_token_nl(context) // Token de salto de línea
+        let n_vocab: Int32 = llama_n_vocab(context)
+        let special_eos_id: llama_token = llama_token_eos(context)
+        let linefeed_id: llama_token = llama_token_nl(context)
 
         let penalty_last_n: Int32 = 5
         let penalty_repeat: Float = 0.8
@@ -232,7 +231,7 @@ actor LlamaContext {
         let utf8Count = text.utf8.count
         let n_tokens = utf8Count + (add_bos ? 1 : 0) + 1
         let tokens = UnsafeMutablePointer<llama_token>.allocate(capacity: n_tokens)
-        let tokenCount = llama_tokenize(model, text, Int32(utf8Count), tokens, Int32(n_tokens), add_bos, false)
+        let tokenCount = llama_tokenize(model, text, Int32(utf8Count), tokens, Int32(n_tokens), add_bos, true)
 
         var swiftTokens: [llama_token] = []
         for i in 0..<tokenCount {

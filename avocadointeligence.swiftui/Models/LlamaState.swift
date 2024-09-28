@@ -19,7 +19,7 @@ class LlamaState: ObservableObject {
     
     // Default model URL from the bundle
     private var defaultModelUrl: URL? {
-        Bundle.main.url(forResource: "Phi-3.5-mini-instruct-IQ3_XS", withExtension: "gguf", subdirectory: "models")
+        Bundle.main.url(forResource: "qwen2.5-1.5b-instruct-q8_0", withExtension: "gguf")
     }
 
     init() {
@@ -54,30 +54,20 @@ class LlamaState: ObservableObject {
         }
     }
     
-    // Loads the default model and downloads if necessary
+    // Loads the default model from the bundle if available
     func loadDefault() async {
-        for model in defaultModels {
-            let fileURL = getDocumentsDirectory().appendingPathComponent(model.filename)
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                try? loadModel(from: fileURL)
-            } else {
-                try? await downloadAndLoadModel(model)
+        if let bundleModelUrl = defaultModelUrl {
+            do {
+                try loadModel(from: bundleModelUrl)
+                print("Loaded model from bundle.")
+            } catch {
+                print("Failed to load model from bundle: \(error)")
             }
+        } else {
+            print("No default model found in bundle.")
         }
     }
     
-    // Downloads the model from the given URL
-    private func downloadAndLoadModel(_ model: Model) async throws {
-        guard let url = URL(string: model.url) else { throw URLError(.badURL) }
-        let (tempFileURL, _) = try await URLSession.shared.download(from: url)
-        let destinationURL = getDocumentsDirectory().appendingPathComponent(model.filename)
-        try FileManager.default.moveItem(at: tempFileURL, to: destinationURL)
-        
-        undownloadedModels.removeAll { $0.name == model.name }
-        downloadedModels.append(model)
-        try loadModel(from: destinationURL)
-    }
-
     // Returns the app's documents directory URL
     private func getDocumentsDirectory() -> URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
@@ -86,9 +76,9 @@ class LlamaState: ObservableObject {
     // Predefined models to be managed
     private let defaultModels: [Model] = [
         Model(
-            name: "gemma-2b-it-q8_0.gguf",
-            url: "https://huggingface.co/lmstudio-ai/gemma-2b-it-GGUF/resolve/main/gemma-2b-it-q8_0.gguf?download=true",
-            filename: "gemma-2b-it-q8_0.gguf",
+            name: "qwen2.5-1.5b-instruct-q8_0.gguf",
+            url: "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q8_0.gguf?download",
+            filename: "qwen2.5-1.5b-instruct-q8_0.gguf",
             status: "download"
         )
     ]
@@ -106,30 +96,25 @@ class LlamaState: ObservableObject {
     }
 
     // Completes text using the model's context and returns results asynchronously
-    // Completes text using the model's context and returns results asynchronously
-    func complete(text: String, resultHandler: @escaping (String) -> Void) async {
+    func complete(text: String, resultHandler: @escaping (String) -> Void, onComplete: @escaping () -> Void) async {
         guard let llamaContext = llamaContext else { return }
 
         let start = DispatchTime.now().uptimeNanoseconds
         await llamaContext.completion_init(text: text)
         
         Task {
-            var generatedText = ""
             while await !llamaContext.is_done {
                 let result = await llamaContext.completion_loop()
-                generatedText += result
-                
-                if generatedText.contains("<end_of_turn>") {
-                    await llamaContext.markAsDone()
-                }
-                
                 await MainActor.run {
                     resultHandler(result)
                 }
             }
+            await MainActor.run {
+                onComplete()
+            }
         }
     }
-
+    
     // Clears the model's context
     func clear() async {
         guard let llamaContext = llamaContext else { return }

@@ -22,7 +22,7 @@ Each feature works seamlessly on devices running iOS in any region (not restrict
 
 ### Model
 
-- Gemma 2b IT
+- Qwen 2.5 1.5B
 
 ## How to Compile AvocadoIntelligence in Xcode
 
