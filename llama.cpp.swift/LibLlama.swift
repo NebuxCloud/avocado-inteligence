@@ -83,6 +83,14 @@ actor LlamaContext {
     static func create_context(path: String) throws -> LlamaContext {
         llama_backend_init()
         var model_params = llama_model_default_params()
+        model_params.use_mmap = true
+        
+        let memoryInGB = ProcessInfo.processInfo.physicalMemory / (1024 * 1024 * 1024)
+        
+        if memoryInGB <= 4 {
+            model_params.n_gpu_layers = 0
+            print("Device has 4GB or less of RAM, setting n_gpu_layers = 0")
+        }
 #if targetEnvironment(simulator)
         model_params.n_gpu_layers = 0
         print("Running on simulator, force use n_gpu_layers = 0")
@@ -231,7 +239,7 @@ actor LlamaContext {
         let utf8Count = text.utf8.count
         let n_tokens = utf8Count + (add_bos ? 1 : 0) + 1
         let tokens = UnsafeMutablePointer<llama_token>.allocate(capacity: n_tokens)
-        let tokenCount = llama_tokenize(model, text, Int32(utf8Count), tokens, Int32(n_tokens), add_bos, true)
+        let tokenCount = llama_tokenize(model, text, Int32(utf8Count), tokens, Int32(n_tokens), true, true)
 
         var swiftTokens: [llama_token] = []
         for i in 0..<tokenCount {

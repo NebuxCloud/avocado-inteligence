@@ -1,24 +1,18 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab: Tab = .main
+    @State private var selectedTab: Tab = .editor
     @StateObject var llamaState = LlamaState() // Estado compartido
     @State private var isLoading: Bool = true // Indicador de carga
 
     enum Tab {
-        case main, editor, assistant
+        case editor, assistant, about
     }
 
     var body: some View {
         ZStack {
             // Tab View principal
             TabView(selection: $selectedTab) {
-                MainView(llamaState: llamaState, isLoading: $isLoading)
-                    .tabItem {
-                        Label("Main", systemImage: "house")
-                    }
-                    .tag(Tab.main)
-
                 EditorView(llamaState: llamaState, isLoading: $isLoading)
                     .tabItem {
                         Label("Editor", systemImage: "pencil")
@@ -30,6 +24,12 @@ struct ContentView: View {
                         Label("Assistant", systemImage: "cpu")
                     }
                     .tag(Tab.assistant)
+            
+                AboutView(llamaState: llamaState, isLoading: $isLoading)
+                    .tabItem {
+                        Label("About", systemImage: "info.circle")
+                    }
+                    .tag(Tab.about)
             }
             .zIndex(0)
 

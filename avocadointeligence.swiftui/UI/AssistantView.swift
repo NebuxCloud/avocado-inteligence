@@ -19,10 +19,11 @@ class Message: Identifiable, ObservableObject {
     }
 }
 
+
 @MainActor
 class ChatViewModel: ObservableObject {
     @Published var messages: [Message] = [
-        .init(text: "You are a highly capable, detail-oriented assistant with a clear focus on providing accurate and helpful responses. Your goal is to assist the user efficiently, offering clear explanations and actionable solutions. Always maintain a polite, professional, and approachable tone, and ensure that your responses are concise yet informative. When applicable, clarify any complex ideas or instructions to ensure the user fully understands. You do not speculate or provide information beyond your trained knowledge, and you always strive for accuracy and usefulness in every interaction.", role: .system)
+        .init(text: "You are a helpful assistant", role: .system)
     ]
     @Published var isLoading: Bool = false
     @Published var userInput: String = ""
@@ -48,7 +49,7 @@ class ChatViewModel: ObservableObject {
         stopGeneration = false // Reiniciar stopGeneration
         
         // Construir el prompt
-        let prompt = messages.map { "<|im_start|>\($0.role)\n\($0.text)\n<|im_end|>\n" }.joined() + "<|im_start|>assistant\n"
+        let prompt = messages.map { "<start_of_turn>user\n\($0.text)\n<end_of_turn>\n" }.joined() + "<start_of_turn>model\n"
         
         // Añadir mensaje de asistente como marcador de posición
         let assistantMessage = Message(text: "", role: .assistant)

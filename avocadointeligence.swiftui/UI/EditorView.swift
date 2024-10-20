@@ -16,7 +16,7 @@ struct EditorView: View {
     
     @Binding var isLoading: Bool
 
-    let textStyles = ["rewrite", "proofread", "professional", "romantic", "summary", "friendly"]
+    let textStyles = ["rewrite", "proofread", "professional", "romantic", "summary", "friendly", "keypoints"]
 
     var body: some View {
         NavigationStack {
@@ -118,37 +118,48 @@ struct EditorView: View {
     @ViewBuilder
     private func InputSection() -> some View {
         VStack {
-            ZStack(alignment: .topTrailing) {
+            ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color(UIColor.secondarySystemBackground))
                     .frame(height: 150)
 
                 TextEditor(text: $userInput)
-                    .padding()
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
                     .background(Color(UIColor.systemBackground))
                     .cornerRadius(15)
                     .overlay(
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(Color.gray.opacity(0.5), lineWidth: 1)
                     )
+                    .font(.body)
+
+                if userInput.isEmpty {
+                    Text("Introduce some text here, or URL to be processed")
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
+                        .font(.body)
+
+                }
             }
             .padding()
 
             if !isKeyboardVisible {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                         ForEach(textStyles, id: \.self) { style in
                             Button(action: {
-                                selectedStyle = style  // Solo se selecciona el estilo
+                                selectedStyle = style
                             }) {
-                                HStack {
-                                    Image(systemName: getIconForStyle(style))  // Añadir icono
+                                VStack {
+                                    Image(systemName: getIconForStyle(style))
                                         .foregroundColor(selectedStyle == style ? .white : .primary)
-                                    
                                     Text(style.capitalized)
                                         .foregroundColor(selectedStyle == style ? .white : .primary)
                                 }
                                 .padding()
+                                .frame(maxWidth: .infinity)
                                 .background(selectedStyle == style ? getColorForStyle(style) : Color.secondary.opacity(0.2))
                                 .cornerRadius(10)
                             }
@@ -200,6 +211,7 @@ struct EditorView: View {
         case "romantic": return "heart.fill"
         case "summary": return "doc.text.fill"
         case "friendly": return "hand.thumbsup.fill"
+        case "keypoints": return "list.bullet"
         default: return "pencil.circle"
         }
     }
@@ -212,6 +224,7 @@ struct EditorView: View {
         case "romantic": return Color.pink
         case "summary": return Color.purple
         case "friendly": return Color.yellow
+        case "keypoints": return Color.teal
         default: return Color.gray
         }
     }
@@ -238,11 +251,11 @@ struct EditorView: View {
             let languageTranslation = getPrompt(for: style, languageCode: languageCode)
 
             let prompt = """
-    <|im_start|>system
+    <start_of_turn>user
     \(languageTranslation)
     Input: \(tmpUserInput)
-    <|im_end|>
-    <|im_start|>assistant
+    <end_of_turn>
+    <start_of_turn>model
     """
 
             result = ""
@@ -349,34 +362,38 @@ struct EditorView: View {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
-    let textEditPrompts: [String: [String: String]] = [
-        "professional": [
-            "es": "Reescribe el siguiente texto para que suene profesional y pulido, manteniéndolo en el idioma original",
-            "en": "Rewrite the following text to sound professional and polished, keeping it in the original language"
-        ],
-        "romantic": [
-            "es": "Reescribe el siguiente texto para que suene romántico y apasionado, pero mantenlo en el idioma original",
-            "en": "Rewrite the following text to sound romantic and passionate, but keep it in the original language"
-        ],
-        "summary": [
-            "es": "Resume el siguiente texto de manera concisa, manteniéndolo en el idioma original",
-            "en": "Summarize the following text concisely, while keeping it in the original language"
-        ],
-        "anything": [
-            "es": "Responde al siguiente texto como lo consideres adecuado, manteniéndolo en el idioma original",
-            "en": "Respond to the following text as you see fit, keeping it in the original language"
-        ],
-        "rewrite": [
-            "es": "Reescribe el siguiente texto de manera clara y fluida, manteniéndolo en el idioma original",
-            "en": "Rewrite the following text clearly and fluently, keeping it in the original language"
-        ],
-        "proofread": [
-            "es": "Revisa y corrige el siguiente texto para mejorar su claridad y corrección, manteniéndolo en el idioma original",
-            "en": "Proofread and correct the following text to improve clarity and accuracy, keeping it in the original language"
-        ],
-        "friendly": [
-            "es": "Reescribe el siguiente texto para que suene amigable y cercano, manteniéndolo en el idioma original",
-            "en": "Rewrite the following text to sound friendly and approachable, keeping it in the original language"
-        ]
+        let textEditPrompts: [String: [String: String]] = [
+            "professional": [
+                "es": "Reescribe el siguiente texto para que suene profesional y pulido. Corrige cualquier error gramatical u ortográfico y utiliza un lenguaje formal adecuado. **No incluyas introducciones ni encabezados en tu respuesta.** Mantén el texto en el idioma original.",
+                "en": "Rewrite the following text to sound professional and polished. Correct any grammatical or spelling errors and use appropriate formal language. **Do not include introductions or headings in your response.** Keep the text in the original language."
+            ],
+            "romantic": [
+                "es": "Reescribe el siguiente texto para que transmita sentimientos románticos y apasionados. Utiliza un lenguaje emotivo y expresivo, y corrige cualquier error gramatical u ortográfico. **No incluyas introducciones ni encabezados en tu respuesta.** Mantén el texto en el idioma original.",
+                "en": "Rewrite the following text to convey romantic and passionate feelings. Use emotive and expressive language, and correct any grammatical or spelling errors. **Do not include introductions or headings in your response.** Keep it in the original language."
+            ],
+            "summary": [
+                "es": "Lee el siguiente texto y elabora un resumen conciso que capture los puntos principales. **Proporciona el resumen directamente sin encabezados.** Asegúrate de mantener el resumen en el idioma original.",
+                "en": "Read the following text and produce a concise summary that captures the main points. **Provide the summary directly without headings.** Ensure that you keep the summary in the original language."
+            ],
+            "keypoints": [
+                "es": "Lee el siguiente texto y extrae los puntos clave más importantes. **Presenta estos puntos en una lista sin introducciones ni encabezados**, manteniendo el idioma original.",
+                "en": "Read the following text and extract the most important key points. **Present these points in a list without introductions or headings**, keeping the original language."
+            ],
+            "anything": [
+                "es": "Lee el siguiente texto y proporciona una respuesta adecuada o comentarios relevantes. **Responde directamente sin introducir tu respuesta.** Asegúrate de mantener tu respuesta en el idioma original.",
+                "en": "Read the following text and provide an appropriate response or relevant comments. **Respond directly without introducing your response.** Make sure to keep your response in the original language."
+            ],
+            "rewrite": [
+                "es": "Reescribe el siguiente texto para mejorar su claridad y fluidez. Corrige cualquier error gramatical u ortográfico y utiliza frases bien estructuradas. **No incluyas introducciones ni encabezados en tu respuesta.** Mantén el texto en el idioma original.",
+                "en": "Rewrite the following text to improve its clarity and fluency. Correct any grammatical or spelling errors and use well-structured sentences. **Do not include introductions or headings in your response.** Keep the text in the original language."
+            ],
+            "proofread": [
+                "es": "Revisa y corrige el siguiente texto para mejorar su claridad y precisión. Corrige errores gramaticales, ortográficos y de puntuación, y mejora la estructura de las oraciones si es necesario. **Proporciona el texto corregido directamente sin introducciones.** Mantén el texto en el idioma original.",
+                "en": "Proofread and correct the following text to improve its clarity and accuracy. Correct grammatical, spelling, and punctuation errors, and improve sentence structure if necessary. **Provide the corrected text directly without introductions.** Keep it in the original language."
+            ],
+            "friendly": [
+                "es": "Reescribe el siguiente texto para que tenga un tono amigable y cercano. Utiliza un lenguaje informal y cálido, y corrige cualquier error gramatical u ortográfico. **No incluyas introducciones ni encabezados en tu respuesta.** Mantén el texto en el idioma original.",
+                "en": "Rewrite the following text to have a friendly and approachable tone. Use informal and warm language, and correct any grammatical or spelling errors. **Do not include introductions or headings in your response.** Keep it in the original language."
+            ]
     ]
 }

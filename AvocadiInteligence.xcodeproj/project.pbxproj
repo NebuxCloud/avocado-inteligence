@@ -13,7 +13,7 @@
 		82B8EB752C99560C00ACC4CE /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 82B8EB742C99560C00ACC4CE /* llama */; };
 		82D33A7B2CA416BF00D0D58F /* AssistantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7A2CA416BB00D0D58F /* AssistantView.swift */; };
 		82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7C2CA4172300D0D58F /* EditorView.swift */; };
-		82D33A7F2CA418F500D0D58F /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7E2CA418F300D0D58F /* MainView.swift */; };
+		82D33A7F2CA418F500D0D58F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7E2CA418F300D0D58F /* AboutView.swift */; };
 		8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */; };
 		8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83782AC328BD0096AF73 /* ContentView.swift */; };
 		8A1C837B2AC328BE0096AF73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C837A2AC328BE0096AF73 /* Assets.xcassets */; };
@@ -42,7 +42,7 @@
 		82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = avocadointeligence.swiftui.entitlements; sourceTree = "<group>"; };
 		82D33A7A2CA416BB00D0D58F /* AssistantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantView.swift; sourceTree = "<group>"; };
 		82D33A7C2CA4172300D0D58F /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
-		82D33A7E2CA418F300D0D58F /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		82D33A7E2CA418F300D0D58F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		82D33A802CA4391A00D0D58F /* AvocadiInteligence-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "AvocadiInteligence-Info.plist"; sourceTree = "<group>"; };
 		8A1C83732AC328BD0096AF73 /* AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = llama_swiftuiApp.swift; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 		8A9F7C4A2AC332BF008AE1EA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				82D33A7E2CA418F300D0D58F /* MainView.swift */,
+				82D33A7E2CA418F300D0D58F /* AboutView.swift */,
 				82D33A7C2CA4172300D0D58F /* EditorView.swift */,
 				82D33A7A2CA416BB00D0D58F /* AssistantView.swift */,
 				8A1C83782AC328BD0096AF73 /* ContentView.swift */,
@@ -226,7 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A907F332AC7138A006146EA /* LibLlama.swift in Sources */,
-				82D33A7F2CA418F500D0D58F /* MainView.swift in Sources */,
+				82D33A7F2CA418F500D0D58F /* AboutView.swift in Sources */,
 				827E72AD2C8EE7AF00E3FD16 /* GlassButton.swift in Sources */,
 				8A9F7C4D2AC332EE008AE1EA /* LlamaState.swift in Sources */,
 				82D33A7B2CA416BF00D0D58F /* AssistantView.swift in Sources */,

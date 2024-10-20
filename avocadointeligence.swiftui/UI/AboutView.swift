@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct MainView: View {
+struct AboutView: View {
     @ObservedObject var llamaState: LlamaState
     @Binding var isLoading: Bool
 
@@ -52,22 +52,47 @@ struct MainView: View {
                         .progressViewStyle(CircularProgressViewStyle())
                         .padding()
                 }
+                
+                // Button to Nebux Cloud website
+                Button(action: {
+                    if let url = URL(string: "https://nebux.cloud/?utm_source=avocado-intelligence&utm_medium=ios-app&utm_campaign=about-section&utm_content=button") {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("Do you need your own solution?")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding(.top, 10)
+
+                // Button for Open Source with link to GitHub repository
+                Button(action: {
+                    if let url = URL(string: "https://github.com/NebuxCloud/avocado-inteligence") {
+                        UIApplication.shared.open(url)
+                    }
+                }) {
+                    Text("We ❤️ Open Source")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.green)
+                        .cornerRadius(10)
+                }
+                .padding(.top, 10)
+
             }
             .padding()
             .navigationTitle("Welcome")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        // Acción para el botón adicional, si es necesario
-                    }) {
-                        Image(systemName: "ellipsis.circle")
-                            .foregroundColor(.accentColor)
-                            .imageScale(.large)
-                    }
-                }
+
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle()) 
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
