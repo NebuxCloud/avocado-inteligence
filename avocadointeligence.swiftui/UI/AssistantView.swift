@@ -12,7 +12,7 @@ class Message: Identifiable, ObservableObject {
         self.role = role
     }
 
-    enum Role {
+    enum Role: String {
         case user
         case assistant
         case system
@@ -27,63 +27,87 @@ class ChatViewModel: ObservableObject {
     ]
     @Published var isLoading: Bool = false
     @Published var userInput: String = ""
-    @Published var stopGeneration: Bool = false // Añadido para detener la generación
+    @Published var stopGeneration: Bool = false // Added to stop generation
 
     private var llamaState: LlamaState
+    private var chatCompletion: LlamaChatCompletion
     private let languageTranslation: String
     
     init(llamaState: LlamaState, languageTranslation: String = "English") {
         self.llamaState = llamaState
         self.languageTranslation = languageTranslation
+        self.chatCompletion = LlamaChatCompletion(llamaState: llamaState)
     }
     
     func sendMessage() async {
         let input = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !input.isEmpty else { return }
         
-        // Añadir mensaje del usuario
+        // Add user message
         let userMessage = Message(text: input, role: .user)
         messages.append(userMessage)
         userInput = ""
         isLoading = true
-        stopGeneration = false // Reiniciar stopGeneration
+        stopGeneration = false // Reset stopGeneration
         
-        // Construir el prompt
-        let prompt = messages.map { "<start_of_turn>user\n\($0.text)\n<end_of_turn>\n" }.joined() + "<start_of_turn>model\n"
-        
-        // Añadir mensaje de asistente como marcador de posición
+        // Create chat messages array for chatCompletion
+        let chatMessages = messages.map { message in
+            ChatMessage(
+                content: message.text,
+                role: message.role == .user ? .user :
+                      message.role == .assistant ? .assistant :
+                      .system
+            )
+        }
+        // Add assistant message as a placeholder
         let assistantMessage = Message(text: "", role: .assistant)
         messages.append(assistantMessage)
         
         do {
             var assistantText = ""
-            try await llamaState.complete(text: prompt, resultHandler: { [weak self] newResult in
-                guard let self = self else { return }
-                
-                // Verificar si stopGeneration es true
-                if self.stopGeneration {
-                    self.isLoading = false
-                    return
-                }
-
-                assistantText += newResult
-                Task { @MainActor in
-                    if let index = self.messages.lastIndex(where: { $0.role == .assistant }) {
-                        self.messages[index].text += newResult
+            
+            // Call chatCompletion's chatCompletion method
+            try await chatCompletion.chatCompletion(
+                messages: chatMessages,
+                resultHandler: { [weak self] newResult in
+                    guard let self = self else { return }
+                    
+                    // Check if stopGeneration is true
+                    if self.stopGeneration {
+                        self.isLoading = false
+                        return
+                    }
+                    
+                    assistantText += newResult
+                    Task { @MainActor in
+                        if let index = self.messages.lastIndex(where: { $0.role == .assistant }) {
+                            self.messages[index].text += newResult
+                        }
+                    }
+                },
+                onComplete: { [weak self] in
+                    // End loading once completed
+                    guard let self = self else { return }
+                    Task { @MainActor in
+                        self.isLoading = false
                     }
                 }
-            }, onComplete: { [weak self] in
-                // Finalizar la carga al completar
-                guard let self = self else { return }
-                Task { @MainActor in
-                    self.isLoading = false
-                }
-            })
+            )
         } catch {
             let errorMessage = Message(text: "An error occurred: \(error.localizedDescription)", role: .assistant)
             messages.append(errorMessage)
             isLoading = false
         }
+    }
+    
+    // Method to stop ongoing generation if needed
+    func stop() {
+        stopGeneration = true
+    }
+    
+    // Clears all messages
+    func clearMessages() {
+        messages.removeAll()
     }
 }
 
@@ -103,7 +127,6 @@ struct MessageView: View {
                     if let attributedString = try? AttributedString(
                         markdown: message.text,
                         options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
-
                     ) {
                         Text(attributedString)
                             .padding()
@@ -146,6 +169,7 @@ struct MessageView: View {
         .padding(.vertical, 8)
     }
 }
+
 struct AssistantView: View {
     @StateObject private var viewModel: ChatViewModel
     @FocusState private var isTextFieldFocused: Bool
@@ -187,9 +211,9 @@ struct AssistantView: View {
                 
                 HStack(spacing: 12) {
                     TextField("Type your message...", text: $viewModel.userInput)
-                        .padding(12)  // Espacio interno para hacerlo más cómodo
-                        .background(Color(UIColor.secondarySystemBackground))  // Fondo más suave
-                        .cornerRadius(25)  // Bordes redondeados
+                        .padding(12)
+                        .background(Color(UIColor.secondarySystemBackground))
+                        .cornerRadius(25)
                         .focused($isTextFieldFocused)
                         .onTapGesture {
                             isTextFieldFocused = true
@@ -197,16 +221,16 @@ struct AssistantView: View {
                     
                     if viewModel.isLoading {
                         Button(action: {
-                            viewModel.stopGeneration = true // Detener la generación
+                            viewModel.stop()
                         }) {
                             Image(systemName: "stop.fill")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20)  // Tamaño del ícono más pequeño y proporcionado
-                                .padding(10)  // Espaciado interior equilibrado para centrar mejor
+                                .frame(width: 20, height: 20)
+                                .padding(10)
                                 .background(Color.red)
                                 .foregroundColor(.white)
-                                .clipShape(Circle())  // Mantiene el botón circular
+                                .clipShape(Circle())
                                 .frame(width: 40, height: 40)
                         }
                     } else {
@@ -218,12 +242,12 @@ struct AssistantView: View {
                             Image(systemName: "paperplane.fill")
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 20, height: 20)  // Tamaño del ícono más pequeño y proporcionado
-                                .padding(10)  // Espaciado interior equilibrado para centrar mejor
+                                .frame(width: 20, height: 20)
+                                .padding(10)
                                 .background(viewModel.isLoading || viewModel.userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray : Color.blue)
                                 .foregroundColor(.white)
-                                .clipShape(Circle())  // Mantiene el botón circular
-                                .frame(width: 40, height: 40)  // Tamaño del botón para asegurar centrado del ícono
+                                .clipShape(Circle())
+                                .frame(width: 40, height: 40)
                         }
                         .disabled(viewModel.isLoading || viewModel.userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     }
@@ -233,7 +257,7 @@ struct AssistantView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
-                        viewModel.clearMessages() // Acción para limpiar los mensajes
+                        viewModel.clearMessages()
                     }) {
                         Image(systemName: "trash")
                             .foregroundColor(.red)
@@ -253,11 +277,5 @@ struct AssistantView: View {
     // Hide keyboard helper function
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-}
-
-extension ChatViewModel {
-    func clearMessages() {
-        messages.removeAll()
     }
 }

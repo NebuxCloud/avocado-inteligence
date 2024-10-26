@@ -18,8 +18,6 @@
 		8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83782AC328BD0096AF73 /* ContentView.swift */; };
 		8A1C837B2AC328BE0096AF73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C837A2AC328BE0096AF73 /* Assets.xcassets */; };
 		8A39BE0A2AC7601100BFEB40 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A39BE092AC7601000BFEB40 /* Accelerate.framework */; };
-		8A907F332AC7138A006146EA /* LibLlama.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A907F322AC7134E006146EA /* LibLlama.swift */; };
-		8A9F7C4D2AC332EE008AE1EA /* LlamaState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A9F7C4C2AC332EE008AE1EA /* LlamaState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -49,14 +47,17 @@
 		8A1C83782AC328BD0096AF73 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8A1C837A2AC328BE0096AF73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A39BE092AC7601000BFEB40 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
-		8A907F322AC7134E006146EA /* LibLlama.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibLlama.swift; sourceTree = "<group>"; };
-		8A9F7C4C2AC332EE008AE1EA /* LlamaState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LlamaState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		82854C132CA6BA8C0010F308 /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		82B7A1782CCD2E5F0029878B /* ChatCompletion */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ChatCompletion;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -97,6 +98,7 @@
 		8A1C83752AC328BD0096AF73 /* avocadointeligence.swiftui */ = {
 			isa = PBXGroup;
 			children = (
+				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */,
 				8A9F7C4B2AC332DC008AE1EA /* Models */,
@@ -119,7 +121,6 @@
 		8A907F312AC7134E006146EA /* llama.cpp.swift */ = {
 			isa = PBXGroup;
 			children = (
-				8A907F322AC7134E006146EA /* LibLlama.swift */,
 			);
 			path = llama.cpp.swift;
 			sourceTree = "<group>";
@@ -140,7 +141,6 @@
 		8A9F7C4B2AC332DC008AE1EA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				8A9F7C4C2AC332EE008AE1EA /* LlamaState.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -163,6 +163,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				82854C132CA6BA8C0010F308 /* Resources */,
+				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
 			);
 			name = AvocadiInteligence;
 			packageProductDependencies = (
@@ -225,10 +226,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A907F332AC7138A006146EA /* LibLlama.swift in Sources */,
 				82D33A7F2CA418F500D0D58F /* AboutView.swift in Sources */,
 				827E72AD2C8EE7AF00E3FD16 /* GlassButton.swift in Sources */,
-				8A9F7C4D2AC332EE008AE1EA /* LlamaState.swift in Sources */,
 				82D33A7B2CA416BF00D0D58F /* AssistantView.swift in Sources */,
 				8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */,
 				82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */,

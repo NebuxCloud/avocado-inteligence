@@ -250,17 +250,16 @@ struct EditorView: View {
             let languageCode = detectLanguage(for: tmpUserInput)
             let languageTranslation = getPrompt(for: style, languageCode: languageCode)
 
-            let prompt = """
-    <start_of_turn>user
-    \(languageTranslation)
-    Input: \(tmpUserInput)
-    <end_of_turn>
-    <start_of_turn>model
-    """
-
             result = ""
-
-            await llamaState.complete(text: prompt, resultHandler: { newResult in
+            
+            let chatCompletiom = LlamaChatCompletion(
+                llamaState: llamaState
+            )
+            
+            await chatCompletiom.chatCompletion(messages: [
+                ChatMessage(content: languageTranslation, role: .system),
+                ChatMessage(content: userInput, role: .user)
+            ], resultHandler: { newResult in
                 DispatchQueue.main.async {
                     if stopGeneration {
                         isGenerating = false
