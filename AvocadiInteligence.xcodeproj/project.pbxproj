@@ -13,6 +13,7 @@
 		82B7A1922CCD58F50029878B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1912CCD58F20029878B /* SettingsView.swift */; };
 		82B7A1952CCE9A910029878B /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 82B7A1942CCE9A910029878B /* Splash */; };
 		82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1962CCEA1F10029878B /* Tasks.swift */; };
+		82B7A19A2CCEAABC0029878B /* Down in Frameworks */ = {isa = PBXBuildFile; productRef = 82B7A1992CCEAABC0029878B /* Down */; };
 		82B8EB752C99560C00ACC4CE /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 82B8EB742C99560C00ACC4CE /* llama */; };
 		82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7C2CA4172300D0D58F /* EditorView.swift */; };
 		8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */; };
@@ -75,6 +76,7 @@
 			files = (
 				82B8EB752C99560C00ACC4CE /* llama in Frameworks */,
 				82B7A1952CCE9A910029878B /* Splash in Frameworks */,
+				82B7A19A2CCEAABC0029878B /* Down in Frameworks */,
 				549479CB2AC9E16000E0F78B /* Metal.framework in Frameworks */,
 				8A39BE0A2AC7601100BFEB40 /* Accelerate.framework in Frameworks */,
 			);
@@ -178,6 +180,7 @@
 			packageProductDependencies = (
 				82B8EB742C99560C00ACC4CE /* llama */,
 				82B7A1942CCE9A910029878B /* Splash */,
+				82B7A1992CCEAABC0029878B /* Down */,
 			);
 			productName = llama.swiftui;
 			productReference = 8A1C83732AC328BD0096AF73 /* AI.app */;
@@ -210,6 +213,7 @@
 			packageReferences = (
 				82B8EB732C99560C00ACC4CE /* XCLocalSwiftPackageReference "deps/llama.cpp" */,
 				82B7A1932CCE9A910029878B /* XCLocalSwiftPackageReference "deps/Splash" */,
+				82B7A1982CCEAABC0029878B /* XCLocalSwiftPackageReference "deps/Down" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8A1C83742AC328BD0096AF73 /* Products */;
@@ -466,6 +470,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = deps/Splash;
 		};
+		82B7A1982CCEAABC0029878B /* XCLocalSwiftPackageReference "deps/Down" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = deps/Down;
+		};
 		82B8EB732C99560C00ACC4CE /* XCLocalSwiftPackageReference "deps/llama.cpp" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = deps/llama.cpp;
@@ -476,6 +484,10 @@
 		82B7A1942CCE9A910029878B /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Splash;
+		};
+		82B7A1992CCEAABC0029878B /* Down */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Down;
 		};
 		82B8EB742C99560C00ACC4CE /* llama */ = {
 			isa = XCSwiftPackageProductDependency;

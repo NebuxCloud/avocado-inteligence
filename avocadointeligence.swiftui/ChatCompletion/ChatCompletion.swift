@@ -21,7 +21,7 @@ class ChatMessage: ObservableObject {
     }
 }
 
-@BackgroundActor
+@MainActor
 class LlamaChatCompletion {
     private var llamaState: LlamaState
     private var stopGeneration = false
@@ -30,7 +30,7 @@ class LlamaChatCompletion {
     init(llamaState: LlamaState) {
         self.llamaState = llamaState
     }
-
+    
     /// Emulates OpenAI's `chatCompletion` method using the model state in `LlamaState`.
     /// - Parameters:
     ///   - messages: A list of `ChatMessage` in chat format with roles like "system", "user", and "assistant".
@@ -49,11 +49,11 @@ class LlamaChatCompletion {
         onComplete: @escaping () -> Void
     ) async {
         if let prompt = llamaState.selectedModel?.chatTemplate(messages) {
-                await llamaState.complete(text: prompt, resultHandler: resultHandler, onComplete: onComplete)
-            } else {
-                print("Error: el modelo no está disponible o no se generó un prompt.")
-                onComplete()
-            }
+            await llamaState.complete(text: prompt, resultHandler: resultHandler, onComplete: onComplete)
+        } else {
+            print("Error: el modelo no está disponible o no se generó un prompt.")
+            onComplete()
+        }
     }
     
     // Method to stop the ongoing generation

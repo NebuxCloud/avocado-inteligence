@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab: Tab = .editor
+    @State private var selectedTab: Tab = .assistant
     @StateObject var llamaState = LlamaState() // Estado compartido
     @State private var isLoading: Bool = true // Indicador de carga
 

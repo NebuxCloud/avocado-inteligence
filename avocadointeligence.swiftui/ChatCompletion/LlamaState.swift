@@ -331,7 +331,7 @@ class LlamaState: ObservableObject {
             name: "Llama-3.2-1B-Instruct-Q4_K_M",
             filename: "Llama-3.2-1B-Instruct-Q4_K_M.gguf",
             size: 1.0,
-            description: "Default model, compatible with all devices, suitable for most applications.",
+            description: "Selected as the default model by Avocado Intelligence due to its optimal fit for most applications. Developed by Meta, this model is well-suited for general-purpose tasks, balancing accuracy and speed across all compatible devices.",
             chatTemplate: llamaChatTemplate,
             bytesInMemory: 400 * 1024 * 1024
         ),
@@ -342,10 +342,9 @@ class LlamaState: ObservableObject {
             size: 3.0,
             isLocal: false,
             status: "download",
-            description: "Larger model, compatible with all devices, suitable for complex applications with higher accuracy.",
+            description: "Larger model chosen by Avocado Intelligence for applications needing higher accuracy. Created by Meta, it is ideal for more complex tasks, maintaining compatibility with all devices.",
             chatTemplate: llamaChatTemplate,
             bytesInMemory: 1200 * 1024 * 1024
-
         ),
         Model(
             name: "gemma-2-2b-it-Q4_K_M",
@@ -354,7 +353,7 @@ class LlamaState: ObservableObject {
             size: 2.0,
             isLocal: false,
             status: "download",
-            description: "Old default model, compatible with all devices, suitable for most applications.",
+            description: "Previously the default model chosen by Avocado Intelligence. Developed by Google, this model is compatible with all devices and suitable for standard applications requiring reliable performance.",
             chatTemplate: gemmaChatTemplate,
             bytesInMemory: 1130 * 1024 * 1024
         ),
@@ -365,20 +364,31 @@ class LlamaState: ObservableObject {
             size: 1.5,
             isLocal: false,
             status: "download",
-            description: "Small model, compatible with all devices, with less accuracy than the default model.",
+            description: "Compact model by Alibaba, selected by Avocado Intelligence for applications where speed is prioritized over precision. Compatible with all devices and suitable for basic tasks.",
             chatTemplate: qwenChatTemplate,
             bytesInMemory: 350 * 1024 * 1024
         ),
         Model(
-            name: "qwen2.5-0.5b-instruct-q4_k_m",
-            url: URL(string: "https://huggingface.co/Qwen/Qwen2.5-0.5B-Instruct-GGUF/resolve/main/qwen2.5-0.5b-instruct-q4_k_m.gguf"),
-            filename: "qwen2.5-0.5b-instruct-q4_k_m.gguf",
-            size: 0.5,
+            name: "qwen2.5-coder-1.5b-instruct-q4_k_m",
+            url: URL(string: "https://huggingface.co/Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF/resolve/main/qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"),
+            filename: "qwen2.5-coder-1.5b-instruct-q4_k_m.gguf",
+            size: 1.5,
             isLocal: false,
             status: "download",
-            description: "Very small model, the fastest, compatible with all devices, with less accuracy than the default model.",
+            description: "Model optimized for coding applications by Alibaba, selected by Avocado Intelligence for efficient, device-compatible coding tasks with moderate precision.",
             chatTemplate: qwenChatTemplate,
-            bytesInMemory: 200 * 1024 * 1024
+            bytesInMemory: 350 * 1024 * 1024
+        ),
+        Model(
+            name: "Meta-Llama-3.1-8B-Instruct-Q4_K_M",
+            url: URL(string: "https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/blob/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"),
+            filename: "Meta-Llama-3.1-8B-Instruct-Q4_K_M",
+            size: 8.0,
+            isLocal: false,
+            status: "download",
+            description: "High-performance model selected by Avocado Intelligence for applications demanding advanced accuracy and complexity. Created by Meta, this model is ideal for intensive tasks and compatible across multiple devices.",
+            chatTemplate: llamaChatTemplate,
+            bytesInMemory: 3600 * 1024 * 1024
         )
     ]
 }

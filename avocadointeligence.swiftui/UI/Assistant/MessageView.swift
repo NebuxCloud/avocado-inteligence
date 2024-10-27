@@ -12,7 +12,7 @@ struct MessageView: View {
     var body: some View {
         HStack {
             if message.role == .assistant {
-                // Style for assistant messages
+                // Estilo para mensajes del asistente
                 VStack(alignment: .leading) {
                     Text("Assistant")
                         .font(.caption)
@@ -20,13 +20,15 @@ struct MessageView: View {
                     
                     let attributedString = attributedStringFromMessageText(message.text)
                     Text(attributedString)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                         .padding()
                         .background(
                             Color.gray.opacity(0.1)
                                 .cornerRadius(15)
                         )
-                        .scaleEffect(isPressed ? 1.05 : 1.0) // Scale effect for feedback
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.3), value: isPressed) // Spring animation
+                        .scaleEffect(isPressed ? 1.05 : 1.0)
+                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.3), value: isPressed)
                         .textSelection(.enabled)
                         .contextMenu {
                             Button(action: {
@@ -53,13 +55,15 @@ struct MessageView: View {
                 }
                 Spacer()
             } else if message.role == .user {
-                // Style for user messages
+                // Estilo para mensajes del usuario
                 Spacer()
                 VStack(alignment: .trailing) {
                     Text("You")
                         .font(.caption)
                         .foregroundColor(.gray)
                     Text(message.text)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                         .padding()
                         .background(
                             Color.blue.opacity(0.2)
@@ -100,7 +104,7 @@ struct MessageView: View {
 func attributedStringFromMessageText(_ text: String) -> AttributedString {
     var attributedString = AttributedString()
     
-    // Regular expression to detect code blocks in markdown
+    // Expresión regular para detectar bloques de código en Markdown
     let regexPattern = "(?s)```(\\w+)?\\n(.*?)```"
     let regex = try! NSRegularExpression(pattern: regexPattern, options: [])
     let nsText = text as NSString
@@ -109,54 +113,48 @@ func attributedStringFromMessageText(_ text: String) -> AttributedString {
     let matches = regex.matches(in: text, options: [], range: NSMakeRange(0, nsText.length))
     
     if matches.isEmpty {
-        // No code blocks, parse as regular markdown
-        if let parsedAttributedString = try? AttributedString(markdown: text) {
+        // Sin bloques de código, parseamos como Markdown normal
+        if let parsedAttributedString = try? AttributedString(markdown: text, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
             attributedString += parsedAttributedString
         } else {
             attributedString += AttributedString(text)
         }
     } else {
-        // Process each segment of text and code
+        // Procesamos cada segmento de texto y código
         for match in matches {
             let rangeBefore = NSRange(location: lastIndex, length: match.range.location - lastIndex)
             let textBefore = nsText.substring(with: rangeBefore)
-            if let parsedTextBefore = try? AttributedString(markdown: textBefore) {
+            if let parsedTextBefore = try? AttributedString(markdown: textBefore, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
                 attributedString += parsedTextBefore
             } else {
                 attributedString += AttributedString(textBefore)
             }
             
-            // Extract optional language identifier
+            // Extraemos el identificador de lenguaje opcional
             let langRange = match.range(at: 1)
             var language: String?
             if langRange.location != NSNotFound {
                 language = nsText.substring(with: langRange)
             }
             
-            // Content of the code block
+            // Contenido del bloque de código
             let codeRange = match.range(at: 2)
             let codeContent = nsText.substring(with: codeRange)
             
-            // Apply syntax highlighting with Splash
+            // Aplicamos resaltado de sintaxis con Splash
             let highlighter = SyntaxHighlighter(format: AttributedStringOutputFormat(theme: .sundellsColors(withFont: .init(size: 13))))
             let highlightedCodeNS = highlighter.highlight(codeContent)
-            
-            // Convert NSAttributedString to AttributedString
-            if let highlightedCode = try? AttributedString(highlightedCodeNS) {
-                attributedString += "\n\n" + highlightedCode + "\n\n"
-            } else {
-                // If conversion fails, add unformatted code
-                attributedString += AttributedString(codeContent)
-            }
+            let highlightedCode = try? AttributedString(highlightedCodeNS)
+            attributedString += "\n\n" + (highlightedCode ?? AttributedString(codeContent)) + "\n\n"
             
             lastIndex = match.range.location + match.range.length
         }
         
-        // Add remaining text after the last code block
+        // Añadimos el texto restante después del último bloque de código
         if lastIndex < nsText.length {
             let rangeAfter = NSRange(location: lastIndex, length: nsText.length - lastIndex)
             let textAfter = nsText.substring(with: rangeAfter)
-            if let parsedTextAfter = try? AttributedString(markdown: textAfter) {
+            if let parsedTextAfter = try? AttributedString(markdown: textAfter, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)) {
                 attributedString += parsedTextAfter
             } else {
                 attributedString += AttributedString(textAfter)
