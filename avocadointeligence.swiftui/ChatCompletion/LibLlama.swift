@@ -47,11 +47,13 @@ actor LlamaContext {
     
         self.sampling = llama_sampler_chain_init(sparams)
         
-       
-        llama_sampler_chain_add(self.sampling, llama_sampler_init_temp(0.3))
-        llama_sampler_chain_add(self.sampling, llama_sampler_init_softmax())
-        llama_sampler_chain_add(self.sampling, llama_sampler_init_dist(1234))
+        let randomSeed = UInt32(Date().timeIntervalSince1970)
         
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_k(40));
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_p(0.9, 1));
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_temp(0.3))
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_dist(randomSeed))
+
         
         let n_vocab: Int32 = llama_n_vocab(context)
         let special_eos_id: llama_token = llama_token_eos(context)
@@ -79,18 +81,14 @@ actor LlamaContext {
         llama_sampler_chain_add(self.sampling, penaltiesSampler)
     }
     
-    
+    func unload() {
+        llama_free(self.context)
+    }
     static func create_context(path: String) throws -> LlamaContext {
         llama_backend_init()
         var model_params = llama_model_default_params()
         model_params.use_mmap = true
         
-        let memoryInGB = ProcessInfo.processInfo.physicalMemory / (1024 * 1024 * 1024)
-        
-        if memoryInGB <= 4 {
-            model_params.n_gpu_layers = 0
-            print("Device has 4GB or less of RAM, setting n_gpu_layers = 0")
-        }
 #if targetEnvironment(simulator)
         model_params.n_gpu_layers = 0
         print("Running on simulator, force use n_gpu_layers = 0")
@@ -102,7 +100,7 @@ actor LlamaContext {
             throw LlamaError.couldNotInitializeContext
         }
 
-        let n_threads = max(1, min(8, ProcessInfo.processInfo.processorCount - 2))
+        let n_threads = max(1, min(8, ProcessInfo.processInfo.processorCount))
         print("Using \(n_threads) threads")
 
         var ctx_params = llama_context_default_params()

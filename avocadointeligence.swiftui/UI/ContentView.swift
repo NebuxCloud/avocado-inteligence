@@ -6,7 +6,7 @@ struct ContentView: View {
     @State private var isLoading: Bool = true // Indicador de carga
 
     enum Tab {
-        case editor, assistant, about
+        case editor, assistant, about, settings
     }
 
     var body: some View {
@@ -25,11 +25,12 @@ struct ContentView: View {
                     }
                     .tag(Tab.assistant)
             
-                AboutView(llamaState: llamaState, isLoading: $isLoading)
+                
+                SettingsView(llamaState: llamaState, isLoading: $isLoading)
                     .tabItem {
-                        Label("About", systemImage: "info.circle")
+                        Label("Settings", systemImage: "gearshape")
                     }
-                    .tag(Tab.about)
+                    .tag(Tab.settings)
             }
             .zIndex(0)
 
@@ -42,10 +43,12 @@ struct ContentView: View {
         }
         .onAppear {
             Task {
-                await llamaState.loadDefault()
+                llamaState.selectModel(llamaState.getSavedModel())
+                try await llamaState.loadSelectedModel()
                 isLoading = false
             }
         }
+        .zIndex(0)
     }
     
     @ViewBuilder
@@ -66,11 +69,5 @@ struct ContentView: View {
                 .ignoresSafeArea()
         )
         .transition(.opacity)  // Transición suave
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

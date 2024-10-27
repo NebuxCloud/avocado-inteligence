@@ -10,10 +10,11 @@
 		549479CB2AC9E16000E0F78B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 549479CA2AC9E16000E0F78B /* Metal.framework */; };
 		827E72AD2C8EE7AF00E3FD16 /* GlassButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827E72AC2C8EE7AF00E3FD16 /* GlassButton.swift */; };
 		827E72AF2C8EEAD600E3FD16 /* TransparentTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827E72AE2C8EEAD600E3FD16 /* TransparentTextEditor.swift */; };
+		82B7A1922CCD58F50029878B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1912CCD58F20029878B /* SettingsView.swift */; };
+		82B7A1952CCE9A910029878B /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 82B7A1942CCE9A910029878B /* Splash */; };
+		82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1962CCEA1F10029878B /* Tasks.swift */; };
 		82B8EB752C99560C00ACC4CE /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 82B8EB742C99560C00ACC4CE /* llama */; };
-		82D33A7B2CA416BF00D0D58F /* AssistantView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7A2CA416BB00D0D58F /* AssistantView.swift */; };
 		82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7C2CA4172300D0D58F /* EditorView.swift */; };
-		82D33A7F2CA418F500D0D58F /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7E2CA418F300D0D58F /* AboutView.swift */; };
 		8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */; };
 		8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83782AC328BD0096AF73 /* ContentView.swift */; };
 		8A1C837B2AC328BE0096AF73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C837A2AC328BE0096AF73 /* Assets.xcassets */; };
@@ -38,9 +39,9 @@
 		827E72AC2C8EE7AF00E3FD16 /* GlassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassButton.swift; sourceTree = "<group>"; };
 		827E72AE2C8EEAD600E3FD16 /* TransparentTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentTextEditor.swift; sourceTree = "<group>"; };
 		82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = avocadointeligence.swiftui.entitlements; sourceTree = "<group>"; };
-		82D33A7A2CA416BB00D0D58F /* AssistantView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantView.swift; sourceTree = "<group>"; };
+		82B7A1912CCD58F20029878B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		82B7A1962CCEA1F10029878B /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tasks.swift; sourceTree = "<group>"; };
 		82D33A7C2CA4172300D0D58F /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
-		82D33A7E2CA418F300D0D58F /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		82D33A802CA4391A00D0D58F /* AvocadiInteligence-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "AvocadiInteligence-Info.plist"; sourceTree = "<group>"; };
 		8A1C83732AC328BD0096AF73 /* AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = llama_swiftuiApp.swift; sourceTree = "<group>"; };
@@ -60,6 +61,11 @@
 			path = ChatCompletion;
 			sourceTree = "<group>";
 		};
+		82B7A17C2CCD4A9D0029878B /* Assistant */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Assistant;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +74,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				82B8EB752C99560C00ACC4CE /* llama in Frameworks */,
+				82B7A1952CCE9A910029878B /* Splash in Frameworks */,
 				549479CB2AC9E16000E0F78B /* Metal.framework in Frameworks */,
 				8A39BE0A2AC7601100BFEB40 /* Accelerate.framework in Frameworks */,
 			);
@@ -98,6 +105,7 @@
 		8A1C83752AC328BD0096AF73 /* avocadointeligence.swiftui */ = {
 			isa = PBXGroup;
 			children = (
+				82B7A1962CCEA1F10029878B /* Tasks.swift */,
 				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */,
@@ -128,9 +136,9 @@
 		8A9F7C4A2AC332BF008AE1EA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				82D33A7E2CA418F300D0D58F /* AboutView.swift */,
+				82B7A1912CCD58F20029878B /* SettingsView.swift */,
+				82B7A17C2CCD4A9D0029878B /* Assistant */,
 				82D33A7C2CA4172300D0D58F /* EditorView.swift */,
-				82D33A7A2CA416BB00D0D58F /* AssistantView.swift */,
 				8A1C83782AC328BD0096AF73 /* ContentView.swift */,
 				827E72AC2C8EE7AF00E3FD16 /* GlassButton.swift */,
 				827E72AE2C8EEAD600E3FD16 /* TransparentTextEditor.swift */,
@@ -164,10 +172,12 @@
 			fileSystemSynchronizedGroups = (
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
+				82B7A17C2CCD4A9D0029878B /* Assistant */,
 			);
 			name = AvocadiInteligence;
 			packageProductDependencies = (
 				82B8EB742C99560C00ACC4CE /* llama */,
+				82B7A1942CCE9A910029878B /* Splash */,
 			);
 			productName = llama.swiftui;
 			productReference = 8A1C83732AC328BD0096AF73 /* AI.app */;
@@ -199,6 +209,7 @@
 			mainGroup = 8A1C836A2AC328BD0096AF73;
 			packageReferences = (
 				82B8EB732C99560C00ACC4CE /* XCLocalSwiftPackageReference "deps/llama.cpp" */,
+				82B7A1932CCE9A910029878B /* XCLocalSwiftPackageReference "deps/Splash" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8A1C83742AC328BD0096AF73 /* Products */;
@@ -226,10 +237,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				82D33A7F2CA418F500D0D58F /* AboutView.swift in Sources */,
 				827E72AD2C8EE7AF00E3FD16 /* GlassButton.swift in Sources */,
-				82D33A7B2CA416BF00D0D58F /* AssistantView.swift in Sources */,
+				82B7A1922CCD58F50029878B /* SettingsView.swift in Sources */,
 				8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */,
+				82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */,
 				82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */,
 				827E72AF2C8EEAD600E3FD16 /* TransparentTextEditor.swift in Sources */,
 				8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */,
@@ -382,7 +393,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nebuxcloud.avocadointelligence;
 				PRODUCT_NAME = AI;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -416,7 +427,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nebuxcloud.avocadointelligence;
 				PRODUCT_NAME = AI;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -451,6 +462,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		82B7A1932CCE9A910029878B /* XCLocalSwiftPackageReference "deps/Splash" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = deps/Splash;
+		};
 		82B8EB732C99560C00ACC4CE /* XCLocalSwiftPackageReference "deps/llama.cpp" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = deps/llama.cpp;
@@ -458,6 +473,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		82B7A1942CCE9A910029878B /* Splash */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Splash;
+		};
 		82B8EB742C99560C00ACC4CE /* llama */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = llama;

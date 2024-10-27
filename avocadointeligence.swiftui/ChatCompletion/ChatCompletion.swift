@@ -21,25 +21,14 @@ class ChatMessage: ObservableObject {
     }
 }
 
-
-
-// Default chat template that structures messages with start and end delimiters
-struct DefaultChatTemplate: ChatTemplate {
-    func formatMessages(_ messages: [ChatMessage]) -> String {
-        return messages.map { "<start_of_turn>\($0.role)\n\($0.content)\n<end_of_turn>\n" }.joined() + "<start_of_turn>model\n"
-    }
-}
-
-@MainActor
+@BackgroundActor
 class LlamaChatCompletion {
     private var llamaState: LlamaState
-    private var chatTemplate: ChatTemplate
     private var stopGeneration = false
     @Published var isLoading = false
     
-    init(llamaState: LlamaState, chatTemplate: ChatTemplate = DefaultChatTemplate()) {
+    init(llamaState: LlamaState) {
         self.llamaState = llamaState
-        self.chatTemplate = chatTemplate
     }
 
     /// Emulates OpenAI's `chatCompletion` method using the model state in `LlamaState`.
@@ -59,8 +48,12 @@ class LlamaChatCompletion {
         resultHandler: @escaping (String) -> Void,
         onComplete: @escaping () -> Void
     ) async {
-        let prompt = chatTemplate.formatMessages(messages)
-        await llamaState.complete(text: prompt, resultHandler: resultHandler, onComplete: onComplete)
+        if let prompt = llamaState.selectedModel?.chatTemplate(messages) {
+                await llamaState.complete(text: prompt, resultHandler: resultHandler, onComplete: onComplete)
+            } else {
+                print("Error: el modelo no está disponible o no se generó un prompt.")
+                onComplete()
+            }
     }
     
     // Method to stop the ongoing generation
