@@ -6,56 +6,63 @@ import Splash
 struct MessageView: View {
     @ObservedObject var message: Message
     private let feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
-    
+    var isLoading: Bool
     @State private var isPressed = false
 
     var body: some View {
         HStack {
             if message.role == .assistant {
-                // Estilo para mensajes del asistente
                 VStack(alignment: .leading) {
                     Text("Assistant")
                         .font(.caption)
                         .foregroundColor(.gray)
                     
                     let attributedString = attributedStringFromMessageText(message.text)
-                    Text(attributedString)
-                        .lineLimit(nil)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding()
-                        .background(
-                            Color.gray.opacity(0.1)
-                                .cornerRadius(15)
-                        )
-                        .scaleEffect(isPressed ? 1.05 : 1.0)
-                        .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.3), value: isPressed)
-                        .textSelection(.enabled)
-                        .contextMenu {
-                            Button(action: {
-                                UIPasteboard.general.string = message.text
-                            }) {
-                                Label("Copy", systemImage: "doc.on.doc")
-                            }
-                        }
-                        .onLongPressGesture(
-                            minimumDuration: 0.1,
-                            pressing: { pressing in
-                                withAnimation {
-                                    isPressed = pressing
-                                    if pressing {
-                                        feedbackGenerator.impactOccurred()
-                                    }
+                    
+                    ZStack(alignment: .bottomTrailing) {
+                        Text(attributedString)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .padding()
+                            .background(
+                                Color.gray.opacity(0.1)
+                                    .cornerRadius(15)
+                            )
+                            .scaleEffect(isPressed ? 1.05 : 1.0)
+                            .animation(.spring(response: 0.3, dampingFraction: 0.5, blendDuration: 0.3), value: isPressed)
+                            .textSelection(.enabled)
+                            .contextMenu {
+                                Button(action: {
+                                    UIPasteboard.general.string = message.text
+                                }) {
+                                    Label("Copy", systemImage: "doc.on.doc")
                                 }
-                            },
-                            perform: {}
-                        )
-                        .onChange(of: message.text) { newValue in
-                            feedbackGenerator.impactOccurred()
+                            }
+                            .onLongPressGesture(
+                                minimumDuration: 0.1,
+                                pressing: { pressing in
+                                    withAnimation {
+                                        isPressed = pressing
+                                        if pressing {
+                                            feedbackGenerator.impactOccurred()
+                                        }
+                                    }
+                                },
+                                perform: {}
+                            )
+                            .onChange(of: message.text) { newValue in
+                                feedbackGenerator.impactOccurred()
+                            }
+                        
+                        if isLoading {
+                            LoadingDotsView()
+                                .padding([.bottom, .trailing], 10)
                         }
+                    }
                 }
                 Spacer()
+                
             } else if message.role == .user {
-                // Estilo para mensajes del usuario
                 Spacer()
                 VStack(alignment: .trailing) {
                     Text("You")

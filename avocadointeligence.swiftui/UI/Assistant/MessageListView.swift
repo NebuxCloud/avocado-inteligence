@@ -9,26 +9,21 @@ struct MessageListView: View {
     var body: some View {
         ScrollView {
             ScrollViewReader { proxy in
-                LazyVStack {
-                    ForEach(messages) { message in
-                        MessageView(message: message)
-                            .id(message.id)
-                    }
-                    .id(messages.count)
-                    
-                    if isLoading {
-                        HStack {
-                            ProgressView()
-                            Text("Thinking...")
-                                .foregroundColor(.gray)
-                        }
-                        .padding()
+                VStack {
+                    ForEach(messages.indices, id: \.self) { index in
+                        MessageView(
+                            message: messages[index],
+                            isLoading: isLoading && index == messages.count - 1
+                        )
+                        .id(messages[index].id)
                     }
 
                     Color.clear
                         .frame(height: 1)
                         .id("scrollAnchor")
+    
                 }
+                .padding(.horizontal)
                 .onAppear {
                     scrollToBottom(proxy: proxy)
                 }

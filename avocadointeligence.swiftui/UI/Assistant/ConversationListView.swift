@@ -1,6 +1,5 @@
 import SwiftUI
 import Combine
-
 struct ConversationListView: View {
     @ObservedObject var viewModel: ChatViewModel
     
@@ -18,7 +17,7 @@ struct ConversationListView: View {
                 } else {
                     ForEach(groupedConversations.keys.sorted(by: >), id: \.self) { date in
                         Section(header: Text(formatDate(date)).font(.subheadline).foregroundColor(.secondary)) {
-                            ForEach(groupedConversations[date] ?? []) { conversation in
+                            ForEach(groupedConversations[date]?.sorted(by: { $0.date > $1.date }) ?? []) { conversation in
                                 Button(action: {
                                     if let index = viewModel.conversations.firstIndex(where: { $0.id == conversation.id }) {
                                         viewModel.selectConversation(at: index)
@@ -34,11 +33,13 @@ struct ConversationListView: View {
                                             .font(.subheadline)
                                             .foregroundColor(.secondary)
                                     }
+                                    .padding(.vertical, 12)
+                                    .padding(.horizontal, 16)
                                 }
-                                .padding(.vertical, 8)
+                                .contentShape(Rectangle())
                             }
                             .onDelete { indexSet in
-                                deleteConversationByIndex(indexSet, date: date)
+                                deleteConversations(at: indexSet, date: date)
                             }
                         }
                     }
@@ -52,26 +53,31 @@ struct ConversationListView: View {
         }
     }
     
-    // Group conversations by date
+    // Agrupar conversaciones por fecha
     private var groupedConversations: [Date: [Conversation]] {
         Dictionary(grouping: viewModel.conversations, by: { Calendar.current.startOfDay(for: $0.date) })
     }
     
-    // Delete conversation by index
-    private func deleteConversationByIndex(_ indexSet: IndexSet, date: Date) {
-        if let index = indexSet.first, let conversation = groupedConversations[date]?[index] {
-            viewModel.deleteConversation(byID: conversation.id)
+    private func deleteConversations(at indexSet: IndexSet, date: Date) {
+        let idsToDelete = indexSet.compactMap { index in
+            groupedConversations[date]?[index].id
         }
+        
+        viewModel.conversations.removeAll { conversation in
+            idsToDelete.contains(conversation.id)
+        }
+        
+        viewModel.saveConversations()
     }
     
-    // Format date for section headers
+    // Formatear la fecha para los encabezados de las secciones
     private func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
         return formatter.string(from: date)
     }
     
-    // Formatter to display time in each conversation cell
+    // Formatear la hora para cada celda de conversación
     private func formatTime(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.timeStyle = .short

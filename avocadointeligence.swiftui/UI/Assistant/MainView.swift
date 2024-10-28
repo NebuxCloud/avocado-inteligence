@@ -24,8 +24,7 @@ struct AssistantView: View {
 
                     Spacer()
                 }
-                .navigationTitle(viewModel.selectedConversation?.title ?? "Assistant")
-                .id(viewModel.selectedConversation?.title)
+                .navigationTitle(viewModel.selectedConversationTitle)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(action: {
@@ -59,6 +58,16 @@ struct AssistantView: View {
                 sideMenu
             }
         }
+        .gesture(
+            DragGesture()
+                .onEnded { value in
+                    if value.translation.width > 100 {
+                        withAnimation {
+                            isMenuVisible = true
+                        }
+                    }
+                }
+        )
         .animation(.easeInOut, value: isMenuVisible)
     }
     

@@ -414,5 +414,5 @@ func gemmaChatTemplate(messages: [ChatMessage]) -> String {
 }
 
 func qwenChatTemplate(messages: [ChatMessage]) -> String {
-    return messages.map { "<|im_start|>\($0.role)\n>\($0.content)<|im_end|>" }.joined() + "<|im_start|>assistant"
+    return messages.map { "<|im_start|>\($0.role)\n>\($0.content)<|im_end|>" }.joined() + "<|im_start|>assistant\n"
 }

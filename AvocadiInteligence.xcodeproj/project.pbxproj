@@ -51,6 +51,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		8242217B2CCFD32600B54C75 /* Animations */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Animations;
+			sourceTree = "<group>";
+		};
 		82854C132CA6BA8C0010F308 /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Resources;
@@ -136,6 +141,7 @@
 		8A9F7C4A2AC332BF008AE1EA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				8242217B2CCFD32600B54C75 /* Animations */,
 				82B7A1912CCD58F20029878B /* SettingsView.swift */,
 				82B7A17C2CCD4A9D0029878B /* Assistant */,
 				82D33A7C2CA4172300D0D58F /* EditorView.swift */,
@@ -170,6 +176,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				8242217B2CCFD32600B54C75 /* Animations */,
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
 				82B7A17C2CCD4A9D0029878B /* Assistant */,

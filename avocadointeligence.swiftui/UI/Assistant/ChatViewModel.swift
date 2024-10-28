@@ -5,7 +5,6 @@ import Foundation
 @MainActor
 class ChatViewModel: ObservableObject {
     @Published var conversations: [Conversation] = []
-    @Published var selectedConversation: Conversation?
     @Published var selectedConversationIndex: Int?
     @Published var isLoading: Bool = false
     @Published var userInput: String = ""
@@ -13,7 +12,8 @@ class ChatViewModel: ObservableObject {
     private var llamaState: LlamaState
     private var chatCompletion: LlamaChatCompletion
     @Binding var isMenuVisible: Bool // Binding para sincronizar el estado del menú
-
+    @Published var selectedConversationTitle: String = "Assistant"
+    
     init(llamaState: LlamaState, isMenuVisible: Binding<Bool>) {
         self.llamaState = llamaState
         self._isMenuVisible = isMenuVisible // Asignar el binding
@@ -24,18 +24,25 @@ class ChatViewModel: ObservableObject {
     func selectConversation(at index: Int) {
         guard conversations.indices.contains(index) else { return }
         selectedConversationIndex = index
-        selectedConversation = conversations[index]
-        print("selected conversation \(index)")
+        selectedConversationTitle = selectedConversation?.title ?? "Assistant"
     }
 
+    var selectedConversation: Conversation? {
+        if let index = selectedConversationIndex, conversations.indices.contains(index) {
+            return conversations[index]
+        }
+        return nil
+    }
+    
     func startNewConversation() {
         let newConversation = Conversation(
             title: "",
-            messages: [Message(text: "You are an intelligent and highly responsive assistant, equipped with deep knowledge across diverse fields. Your primary goal is to provide clear, accurate, and well-structured information that meets the user’s needs. Always prioritize clarity, professionalism, and conciseness, and adapt your responses to align with the user’s intent. Answer questions thoroughly but avoid unnecessary detail, and engage in a friendly yet respectful manner. You aim to be insightful, approachable, and consistently helpful.", role: .system)],
+            messages: [Message(text: "You are a highly responsive assistant with deep knowledge. Your goal is to deliver clear, accurate, and concise information. Prioritize brevity, professionalism, and alignment with the user’s intent. Be insightful, approachable, and consistently helpful.", role: .system)],
             date: Date()
         )
         conversations.append(newConversation)
         selectConversation(at: conversations.count - 1)
+        selectedConversationTitle = newConversation.title.isEmpty ? "Assistant" : newConversation.title
     }
 
     func sendMessage() async {
@@ -97,18 +104,18 @@ class ChatViewModel: ObservableObject {
     }
     
     private func generateTitle(for index: Int) async {
-        // Create a prompt to generate a title based on the conversation context
         let prompt = "Generate a concise and engaging title for the following conversation based on the initial message:\n\n\(conversations[index].messages[1].text)"
         
         do {
-            // Call the chat completion API to generate a title
             try await chatCompletion.chatCompletion(
                 messages: [ChatMessage(content: prompt, role: .system)],
                 resultHandler: { [weak self] newTitle in
                     guard let self = self else { return }
                     Task { @MainActor in
                         self.conversations[index].title += newTitle
+                        selectedConversationTitle = self.conversations[index].title
                         self.saveConversations()
+                        
                     }
                 },
                 onComplete: {}
@@ -148,6 +155,12 @@ class ChatViewModel: ObservableObject {
                     selectConversation(at: 0)
                 }
             }
+        }
+    }
+    
+    func deleteConversations(byIDs ids: [UUID]) {
+        ids.forEach { id in
+            deleteConversation(byID: id)
         }
     }
 
