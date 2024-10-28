@@ -2,44 +2,48 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var selectedTab: Tab = .assistant
-    @StateObject var llamaState = LlamaState() // Estado compartido
-    @State private var isLoading: Bool = true // Indicador de carga
+    @StateObject var llamaState = LlamaState()
+    @State private var isLoading: Bool = true
+    @State private var isMenuVisible: Bool = false // Control de visibilidad del menú
 
     enum Tab {
-        case editor, assistant, about, settings
+        case editor, assistant, settings
     }
 
     var body: some View {
-        ZStack {
-            // Tab View principal
+        ZStack(alignment: .leading) {
             TabView(selection: $selectedTab) {
                 EditorView(llamaState: llamaState, isLoading: $isLoading)
                     .tabItem {
-                        Label("Editor", systemImage: "pencil")
+                        if !isMenuVisible {
+                            Label("Editor", systemImage: "pencil")
+                        } else  {
+                            Label("", systemImage: "")
+                        }
                     }
                     .tag(Tab.editor)
-
-                AssistantView(llamaState: llamaState)
+                
+                AssistantView(isMenuVisible: $isMenuVisible, llamaState: llamaState) // Pasamos el binding de isMenuVisible
                     .tabItem {
-                        Label("Assistant", systemImage: "cpu")
+                        if !isMenuVisible {
+                            Label("Assistant", systemImage: "cpu")
+                        }else  {
+                            Label("", systemImage: "")
+                        }
                     }
                     .tag(Tab.assistant)
-            
                 
                 SettingsView(llamaState: llamaState, isLoading: $isLoading)
                     .tabItem {
-                        Label("Settings", systemImage: "gearshape")
+                        if !isMenuVisible {
+                            Label("Settings", systemImage: "gearshape")
+                        }else  {
+                            Label("", systemImage: "")
+                        }
                     }
                     .tag(Tab.settings)
             }
             .zIndex(0)
-
-            // Capa de carga superpuesta
-            if isLoading {
-                LoadingView()
-                    .transition(.opacity)
-                    .zIndex(1)
-            }
         }
         .onAppear {
             Task {
@@ -48,26 +52,6 @@ struct ContentView: View {
                 isLoading = false
             }
         }
-        .zIndex(0)
-    }
-    
-    @ViewBuilder
-    private func LoadingView() -> some View {
-        VStack(spacing: 20) {
-            ProgressView("Loading AI...")
-                .progressViewStyle(CircularProgressViewStyle(tint: .blue))
-                .scaleEffect(1.5)
-                .padding()
-
-            Text("Preparing AI...")
-                .font(.headline)
-                .foregroundColor(.gray)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(
-            Color.black.opacity(0.6)  // Fondo semitransparente
-                .ignoresSafeArea()
-        )
-        .transition(.opacity)  // Transición suave
+        .animation(.easeInOut, value: isMenuVisible)
     }
 }

@@ -70,33 +70,16 @@ struct EditorView: View {
         ScrollViewReader { scrollView in
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
-
-                    if let attributedString = try? AttributedString(
-                        markdown: result,
-                        options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)
-                    ) {
-                        Text(attributedString)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .font(.body)
-                            .cornerRadius(15)
-                            .textSelection(.enabled)
-                            .onChange(of: result) { newValue in
-                                feedbackGenerator.impactOccurred()
-                            }
-                    } else {
-                        Text(result)
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .background(Color(UIColor.secondarySystemBackground))
-                            .font(.body)
-                            .cornerRadius(15)
-                            .textSelection(.enabled)
-                            .onChange(of: result) { newValue in
-                                feedbackGenerator.impactOccurred()
-                            }
-                    }
+                    Text(result)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color(UIColor.secondarySystemBackground))
+                        .font(.body)
+                        .cornerRadius(15)
+                        .textSelection(.enabled)
+                        .onChange(of: result) { newValue in
+                            feedbackGenerator.impactOccurred()
+                        }
 
                     Color.clear
                         .frame(height: 1)
@@ -118,6 +101,7 @@ struct EditorView: View {
     @ViewBuilder
     private func InputSection() -> some View {
         VStack {
+            // Campo de entrada de texto
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 10)
                     .fill(Color(UIColor.secondarySystemBackground))
@@ -140,7 +124,6 @@ struct EditorView: View {
                         .padding(.horizontal, 20)
                         .padding(.vertical, 20)
                         .font(.body)
-
                 }
             }
             .padding()
@@ -168,41 +151,34 @@ struct EditorView: View {
                     .padding(.horizontal)
                 }
 
-                HStack {
+                // Botón de acción (Execute/Stop)
+                Button(action: {
                     if isGenerating {
-                        Button(action: {
-                            stopGeneration = true
-                        }) {
-                            HStack {
-                                ProgressView()
-                                    .padding(.trailing, 5)
-                                Text("Stop")
-                            }
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                        }
+                        stopGeneration = true
                     } else {
-                        Button(action: {
-                            rewriteText(style: selectedStyle)  // Ahora la acción solo se ejecuta aquí
-                        }) {
+                        rewriteText(style: selectedStyle)
+                    }
+                }) {
+                    HStack {
+                        if isGenerating {
+                            ProgressView()
+                                .padding(.trailing, 5)
+                            Text("Stop")
+                        } else {
                             Label("Execute", systemImage: "play.fill")
-                                .padding()
-                                .frame(maxWidth: .infinity)
-                                .background(isGenerating ? Color.gray : Color.blue)
-                                .foregroundColor(.white)
-                                .cornerRadius(10)
                         }
                     }
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(isGenerating ? Color.red : Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
                 }
                 .padding(.horizontal)
             }
         }
         .padding()
     }
-    
     func getIconForStyle(_ style: String) -> String {
         switch style {
         case "rewrite": return "pencil.circle.fill"

@@ -14,6 +14,7 @@ struct MessageListView: View {
                         MessageView(message: message)
                             .id(message.id)
                     }
+                    .id(messages.count)
                     
                     if isLoading {
                         HStack {

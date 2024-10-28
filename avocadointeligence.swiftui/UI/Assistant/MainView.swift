@@ -1,173 +1,153 @@
 import SwiftUI
 import Combine
-import UIKit
 
 struct AssistantView: View {
     @StateObject private var viewModel: ChatViewModel
     @FocusState private var isTextFieldFocused: Bool
-    @State private var offset: CGFloat = -UIScreen.main.bounds.width * 0.75 // Initially hidden
-    private let menuWidth = UIScreen.main.bounds.width * 0.75
+    @Binding var isMenuVisible: Bool
+    private let textFieldHeight: CGFloat = 40
 
-    init(llamaState: LlamaState) {
-        _viewModel = StateObject(wrappedValue: ChatViewModel(llamaState: llamaState))
+    init(isMenuVisible: Binding<Bool>, llamaState: LlamaState) {
+        _isMenuVisible = isMenuVisible
+        _viewModel = StateObject(wrappedValue: ChatViewModel(llamaState: llamaState, isMenuVisible: isMenuVisible))
     }
-
+    
     var body: some View {
-        GeometryReader { geometry in
-            ZStack(alignment: .leading) {
-                // Main content and overlay
-                ZStack {
-                    // Conversation screen, shifted by the menu offset
-                    NavigationStack {
-                        VStack {
-                            // Main conversation display
-                            MessageListView(messages: viewModel.selectedConversation?.messages ?? [], isLoading: viewModel.isLoading)
-                            
-                            Divider()
-                            
-                            HStack(spacing: 12) {
-                                TextField("Type your message...", text: $viewModel.userInput)
-                                    .padding(12)
-                                    .background(Color(UIColor.secondarySystemBackground))
-                                    .cornerRadius(25)
-                                    .focused($isTextFieldFocused)
-                                    .onTapGesture {
-                                        isTextFieldFocused = true
-                                    }
-                                
-                                if viewModel.isLoading {
-                                    Button(action: {
-                                        viewModel.stop()
-                                    }) {
-                                        Image(systemName: "stop.fill")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 20, height: 20)
-                                            .padding(10)
-                                            .background(Color.red)
-                                            .foregroundColor(.white)
-                                            .clipShape(Circle())
-                                            .frame(width: 40, height: 40)
-                                    }
-                                } else {
-                                    Button(action: {
-                                        Task {
-                                            await viewModel.sendMessage()
-                                        }
-                                    }) {
-                                        Image(systemName: "paperplane.fill")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 20, height: 20)
-                                            .padding(10)
-                                            .background(viewModel.isLoading || viewModel.userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? Color.gray : Color.blue)
-                                            .foregroundColor(.white)
-                                            .clipShape(Circle())
-                                            .frame(width: 40, height: 40)
-                                    }
-                                    .disabled(viewModel.isLoading || viewModel.userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                                }
-                            }
+        ZStack(alignment: .leading) {
+            NavigationStack {
+                VStack {
+                    conversationView
+
+                    Divider()
+
+                    inputFieldWithButton
+
+                    Spacer()
+                }
+                .navigationTitle(viewModel.selectedConversation?.title ?? "Assistant")
+                .id(viewModel.selectedConversation?.title)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
+                            withAnimation { isMenuVisible.toggle() }
+                        }) {
+                            Image(systemName: "list.bullet")
                         }
-                        .navigationTitle(viewModel.selectedConversation?.title ?? "Assistant")
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(action: {
-                                    toggleMenu()
-                                }) {
-                                    Image(systemName: "list.bullet")
-                                }
-                            }
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button(action: { viewModel.startNewConversation() }) {
-                                    Image(systemName: "plus")
-                                }
-                                .disabled(viewModel.selectedConversation?.messages.isEmpty ?? true)
-                            }
-                        }
-                        .onAppear {
-                            selectOrCreateConversation()
-                        }
-                        .onTapGesture {
-                            hideKeyboard()
-                        }
-                        .padding(.horizontal)
-                        .padding(.bottom)
-                        .offset(x: offset + menuWidth) // Shifts the conversation screen
-                        .gesture(
-                            DragGesture()
-                                .onChanged { value in
-                                    if value.translation.width > 0 {
-                                        offset = max(-menuWidth + value.translation.width, 0)
-                                    } else if value.translation.width < 0 && offset == 0 {
-                                        offset = min(0 + value.translation.width, -menuWidth)
-                                    }
-                                }
-                                .onEnded { _ in
-                                    if offset > -menuWidth / 2 {
-                                        showMenu()
-                                    } else {
-                                        hideMenu()
-                                    }
-                                }
-                        )
-                        .disabled(offset == 0) // Only disables main content when menu is open
                     }
-                    .navigationViewStyle(StackNavigationViewStyle())
-                    
-                    // Semi-transparent overlay when the menu is open
-                    if offset == 0 {
-                        Color.black.opacity(0.4)
-                            .edgesIgnoringSafeArea(.all)
-                            .onTapGesture {
-                                hideMenu()
-                            }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { viewModel.startNewConversation() }) {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
-                
-                // Conversation menu view, shown over the overlay
-                ConversationListView(viewModel: viewModel)
-                    .frame(width: menuWidth)
-                    .offset(x: offset) // Controls menu position with offset
-                    .transition(.move(edge: .leading))
-                    .shadow(color: .black.opacity(0.3), radius: 5, x: offset == 0 ? 5 : 0, y: 0)
-                    .zIndex(10)
+                .onAppear {
+                    handleOnAppear()
+                }
+                .offset(x: isMenuVisible ? UIScreen.main.bounds.width * 0.75 : 0)
+                .disabled(isMenuVisible)
+                .onTapGesture {
+                    dismissKeyboard()
+                } // Cierra el teclado al hacer tap fuera del campo de texto
+            }
+            .navigationViewStyle(StackNavigationViewStyle())
+
+            if isMenuVisible {
+                menuOverlay
+            }
+
+            if isMenuVisible {
+                sideMenu
+            }
+        }
+        .animation(.easeInOut, value: isMenuVisible)
+    }
+    
+    // MARK: - Subviews
+
+    private var conversationView: some View {
+        Group {
+            if let selectedConversation = viewModel.selectedConversation {
+                MessageListView(messages: selectedConversation.messages, isLoading: viewModel.isLoading)
+            } else {
+                Text("No conversation selected")
+                    .foregroundColor(.gray)
             }
         }
     }
 
-    private func toggleMenu() {
-        if offset == 0 {
-            hideMenu()
-        } else {
-            showMenu()
+    private var inputFieldWithButton: some View {
+        HStack {
+            TextField("Type your message...", text: $viewModel.userInput)
+                .font(.body)
+                .padding(.leading, 12)
+                .padding(.vertical, 8)
+                .background(Color.clear)
+                .focused($isTextFieldFocused)
+                .onTapGesture {
+                    isTextFieldFocused = true
+                }
+            
+            Button(action: {
+                handleSendOrStop()
+            }) {
+                Image(systemName: viewModel.isLoading ? "stop.fill" : "paperplane.fill")
+                    .foregroundColor(viewModel.isLoading ? .red : (viewModel.userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? .gray : .blue))
+            }
+            .padding(10)
+            .background(Color.clear)
+            .clipShape(Circle())
         }
+        .padding(.horizontal, 8)
+        .background(Color(UIColor.secondarySystemBackground))
+        .cornerRadius(15)
+        .padding(.horizontal)
+        .padding(.vertical, 8)
     }
 
-    private func showMenu() {
-        withAnimation {
-            offset = 0
-        }
+
+    private var menuOverlay: some View {
+        Color.black.opacity(0.4)
+            .ignoresSafeArea()
+            .onTapGesture {
+                withAnimation { isMenuVisible = false }
+                dismissKeyboard()
+            }
+            .zIndex(1)
     }
 
-    private func hideMenu() {
-        withAnimation {
-            offset = -menuWidth
-        }
+    private var sideMenu: some View {
+        ConversationListView(viewModel: viewModel)
+            .frame(width: UIScreen.main.bounds.width * 0.75)
+            .background(Color(UIColor.systemBackground))
+            .transition(.move(edge: .leading))
+            .zIndex(2)
     }
 
-    private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-    }
-    
-    // Selects the last conversation if none is selected, or starts a new one if no conversations exist
-    private func selectOrCreateConversation() {
+    // MARK: - Helper Methods
+
+    private func handleOnAppear() {
         if viewModel.conversations.isEmpty {
-            // No conversations exist, so create a new one
             viewModel.startNewConversation()
         } else if viewModel.selectedConversation == nil {
-            // Select the last conversation if none is selected
             viewModel.selectConversation(at: viewModel.conversations.count - 1)
         }
+    }
+
+    private func handleSendOrStop() {
+        if viewModel.isLoading {
+            Task {
+                await viewModel.stopConversation()
+            }
+        } else if !viewModel.userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            Task {
+                await viewModel.sendMessage()
+                viewModel.userInput = ""
+                dismissKeyboard()
+            }
+        }
+    }
+
+    private func dismissKeyboard() {
+        isTextFieldFocused = false
     }
 }

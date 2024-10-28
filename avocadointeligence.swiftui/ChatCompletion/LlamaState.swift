@@ -289,13 +289,25 @@ class LlamaState: ObservableObject {
         
         await llamaContext.completion_init(text: text)
         
-        Task {
-            while await !llamaContext.is_done {
-                let result = await llamaContext.completion_loop()
-                await MainActor.run { resultHandler(result) }
+        await withCheckedContinuation { continuation in
+            Task {
+                // Bucle de completación
+                while !(await llamaContext.is_done) {
+                    let result = await llamaContext.completion_loop()
+                    await MainActor.run {
+                        resultHandler(result)
+                    }
+                }
+                await MainActor.run {
+                    onComplete()
+                    continuation.resume()
+                }
             }
-            await MainActor.run { onComplete() }
         }
+    }
+    
+    func stop() async {
+        await self.llamaContext?.markAsDone()
     }
 
     // Clears the model context
@@ -380,15 +392,15 @@ class LlamaState: ObservableObject {
             bytesInMemory: 350 * 1024 * 1024
         ),
         Model(
-            name: "Meta-Llama-3.1-8B-Instruct-Q4_K_M",
-            url: URL(string: "https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/blob/main/Meta-Llama-3.1-8B-Instruct-Q4_K_M.gguf"),
-            filename: "Meta-Llama-3.1-8B-Instruct-Q4_K_M",
+            name: "Meta-Llama-3.1-8B-Instruct-IQ3_XS",
+            url: URL(string: "https://huggingface.co/bartowski/Meta-Llama-3.1-8B-Instruct-GGUF/resolve/main/Meta-Llama-3.1-8B-Instruct-IQ3_XS.gguf"),
+            filename: "Meta-Llama-3.1-8B-Instruct-IQ3_XS.gguf",
             size: 8.0,
             isLocal: false,
             status: "download",
             description: "High-performance model selected by Avocado Intelligence for applications demanding advanced accuracy and complexity. Created by Meta, this model is ideal for intensive tasks and compatible across multiple devices.",
             chatTemplate: llamaChatTemplate,
-            bytesInMemory: 3600 * 1024 * 1024
+            bytesInMemory: 4294 * 1024 * 1024
         )
     ]
 }

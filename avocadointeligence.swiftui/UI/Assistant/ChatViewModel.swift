@@ -5,169 +5,125 @@ import Foundation
 @MainActor
 class ChatViewModel: ObservableObject {
     @Published var conversations: [Conversation] = []
+    @Published var selectedConversation: Conversation?
     @Published var selectedConversationIndex: Int?
     @Published var isLoading: Bool = false
     @Published var userInput: String = ""
     @Published var stopGeneration: Bool = false
-    @Published var showConversationList = false
     private var llamaState: LlamaState
     private var chatCompletion: LlamaChatCompletion
+    @Binding var isMenuVisible: Bool // Binding para sincronizar el estado del menú
 
-    init(llamaState: LlamaState) {
+    init(llamaState: LlamaState, isMenuVisible: Binding<Bool>) {
         self.llamaState = llamaState
+        self._isMenuVisible = isMenuVisible // Asignar el binding
         self.chatCompletion = LlamaChatCompletion(llamaState: llamaState)
         loadConversations()
     }
-    
-    func stop() {
-        stopGeneration = true
+
+    func selectConversation(at index: Int) {
+        guard conversations.indices.contains(index) else { return }
+        selectedConversationIndex = index
+        selectedConversation = conversations[index]
+        print("selected conversation \(index)")
     }
-    
-    var selectedConversation: Conversation? {
-        get {
-            guard let index = selectedConversationIndex else { return nil }
-            return conversations[index]
-        }
-        set {
-            guard let index = selectedConversationIndex, let newValue = newValue else { return }
-            conversations[index] = newValue
-        }
+
+    func startNewConversation() {
+        let newConversation = Conversation(
+            title: "",
+            messages: [Message(text: "You are an intelligent and highly responsive assistant, equipped with deep knowledge across diverse fields. Your primary goal is to provide clear, accurate, and well-structured information that meets the user’s needs. Always prioritize clarity, professionalism, and conciseness, and adapt your responses to align with the user’s intent. Answer questions thoroughly but avoid unnecessary detail, and engage in a friendly yet respectful manner. You aim to be insightful, approachable, and consistently helpful.", role: .system)],
+            date: Date()
+        )
+        conversations.append(newConversation)
+        selectConversation(at: conversations.count - 1)
     }
 
     func sendMessage() async {
-        guard var conversation = selectedConversation else { return }
+        guard let selectedIndex = selectedConversationIndex else { return }
+        guard !userInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
 
-        let input = userInput.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !input.isEmpty else { return }
-
-        let userMessage = Message(text: input, role: .user)
-        conversation.messages.append(userMessage)
-        selectedConversation = conversation
+        // Prepare user message
+        let userMessage = Message(text: userInput.trimmingCharacters(in: .whitespacesAndNewlines), role: .user)
+        conversations[selectedIndex].messages.append(userMessage)
         userInput = ""
         isLoading = true
         stopGeneration = false
 
+        // Prepare placeholder for assistant response
         let assistantMessage = Message(text: "", role: .assistant)
-        conversation.messages.append(assistantMessage)
-        selectedConversation = conversation
+        conversations[selectedIndex].messages.append(assistantMessage)
 
         do {
-            var assistantText = ""
-            let chatMessages = conversation.messages.map { ChatMessage(content: $0.text, role: $0.role == .user ? .user : .assistant) }
-
-            if conversation.messages.count == 3 {
-                await self.updateConversationTitle(for: conversation, initialMessage: input)
+            // Generate assistant response
+            let chatMessages = conversations[selectedIndex].messages.map {
+                ChatMessage(content: $0.text, role: $0.role == .user ? .user : .assistant)
             }
-            
+
             try await chatCompletion.chatCompletion(
                 messages: chatMessages,
                 resultHandler: { [weak self] newResult in
                     guard let self = self else { return }
-                    
                     if self.stopGeneration {
                         self.isLoading = false
                         return
                     }
-
-                    assistantText += newResult
                     Task { @MainActor in
-                        if var selected = self.selectedConversation {
-                            if let index = selected.messages.lastIndex(where: { $0.role == .assistant }) {
-                                selected.messages[index].text += newResult
-                                self.selectedConversation = selected
-                            }
+                        // Append newResult to assistant's last message text
+                        if let messageIndex = self.conversations[selectedIndex].messages.lastIndex(where: { $0.role == .assistant }) {
+                            self.conversations[selectedIndex].messages[messageIndex].text += newResult
                         }
                     }
                 },
                 onComplete: { [weak self] in
                     Task { @MainActor in
-                        guard let self = self else { return }
+                        self?.isLoading = false
                         
-                        self.isLoading = false
-                        self.saveConversations()
+                        if chatMessages.count == 3 {
+                            guard let self = self else { return }
+
+                            await self.generateTitle(for: selectedIndex)
+                        }
+                        
+                        self?.saveConversations()
                     }
                 }
             )
         } catch {
+            // Handle error during message generation
             let errorMessage = Message(text: "An error occurred: \(error.localizedDescription)", role: .assistant)
-            conversation.messages.append(errorMessage)
-            selectedConversation = conversation
+            conversations[selectedIndex].messages.append(errorMessage)
             isLoading = false
         }
     }
     
-    func deleteAllConversations() {
-        conversations.removeAll()
-        saveConversations()
-    }
-
-    func deleteConversation(at indexSet: IndexSet) {
-        for index in indexSet {
-            conversations.remove(at: index)
-            if selectedConversationIndex == index {
-                selectedConversationIndex = nil
-            } else if let selected = selectedConversationIndex, selected > index {
-                selectedConversationIndex = selected - 1
-            }
-        }
+    private func generateTitle(for index: Int) async {
+        // Create a prompt to generate a title based on the conversation context
+        let prompt = "Generate a concise and engaging title for the following conversation based on the initial message:\n\n\(conversations[index].messages[1].text)"
         
-        saveConversations()
+        do {
+            // Call the chat completion API to generate a title
+            try await chatCompletion.chatCompletion(
+                messages: [ChatMessage(content: prompt, role: .system)],
+                resultHandler: { [weak self] newTitle in
+                    guard let self = self else { return }
+                    Task { @MainActor in
+                        self.conversations[index].title += newTitle
+                        self.saveConversations()
+                    }
+                },
+                onComplete: {}
+            )
+        } catch {
+            print("Failed to generate title: \(error)")
+        }
     }
     
-    func startNewConversation() {
-        let newConversation = Conversation(title: "", messages: [Message(text: "You are a knowledgeable and responsive assistant...", role: .system)], date: Date())
-        conversations.append(newConversation)
-        selectedConversationIndex = conversations.count - 1
-        
-        Task { @MainActor in
-            self.showConversationList = false
-        }
+    func stopConversation() async {
+        stopGeneration = false
+        await self.llamaState.stop()
     }
 
-    private func updateConversationTitle(for conversation: Conversation, initialMessage: String) async -> String? {
-        await withCheckedContinuation { continuation in
-            Task {
-                do {
-                    var title = ""
-                    try await chatCompletion.chatCompletion(
-                        messages: [
-                            ChatMessage(content: "Create a title from the initial message, with 3 words, no more output: \(initialMessage)", role: .system)
-                        ],
-                        resultHandler: { [weak self] newResult in
-                            guard let self = self else { return }
-                            
-                            if self.stopGeneration {
-                                self.isLoading = false
-                                continuation.resume(returning: nil)
-                                return
-                            }
-
-                            title += newResult
-                        },
-                        onComplete: { [weak self] in
-                            Task { @MainActor in
-                                guard let self = self else { return }
-                                
-                                if let index = self.conversations.firstIndex(where: { $0.id == conversation.id }) {
-                                    self.conversations[index].title = title
-                                }
-                                continuation.resume(returning: title)
-                            }
-                        }
-                    )
-                } catch {
-                    isLoading = false
-                    continuation.resume(returning: nil)
-                }
-            }
-        }
-    }
-
-    func selectConversation(at index: Int) {
-        selectedConversationIndex = index
-    }
-
-
+    // Save conversations to UserDefaults
     func saveConversations() {
         do {
             let data = try JSONEncoder().encode(conversations)
@@ -176,11 +132,35 @@ class ChatViewModel: ObservableObject {
             print("Failed to save conversations: \(error)")
         }
     }
+    
+    func deleteConversation(byID id: UUID) {
+        if let index = conversations.firstIndex(where: { $0.id == id }) {
+            conversations.remove(at: index)
+            saveConversations()
 
+            // Si la conversación eliminada era la seleccionada, actualiza la selección
+            if selectedConversation?.id == id {
+                if conversations.isEmpty {
+                    startNewConversation()
+                } else if index > 0 {
+                    selectConversation(at: index - 1)
+                } else {
+                    selectConversation(at: 0)
+                }
+            }
+        }
+    }
+
+    // Load conversations from UserDefaults
     func loadConversations() {
         if let data = UserDefaults.standard.data(forKey: "savedConversations") {
             do {
                 conversations = try JSONDecoder().decode([Conversation].self, from: data)
+                if let lastIndex = conversations.indices.last {
+                    selectConversation(at: lastIndex)
+                } else {
+                    startNewConversation()
+                }
             } catch {
                 print("Failed to load conversations: \(error)")
                 startNewConversation()

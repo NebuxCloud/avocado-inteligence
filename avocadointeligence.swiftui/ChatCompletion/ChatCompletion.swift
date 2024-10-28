@@ -57,7 +57,8 @@ class LlamaChatCompletion {
     }
     
     // Method to stop the ongoing generation
-    func stopCompletion() {
+    func stopCompletion() async {
         stopGeneration = true
+        await self.llamaState.stop()
     }
 }
