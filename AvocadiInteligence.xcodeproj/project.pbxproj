@@ -8,15 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		549479CB2AC9E16000E0F78B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 549479CA2AC9E16000E0F78B /* Metal.framework */; };
-		827E72AD2C8EE7AF00E3FD16 /* GlassButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827E72AC2C8EE7AF00E3FD16 /* GlassButton.swift */; };
-		827E72AF2C8EEAD600E3FD16 /* TransparentTextEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827E72AE2C8EEAD600E3FD16 /* TransparentTextEditor.swift */; };
-		82B7A1922CCD58F50029878B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1912CCD58F20029878B /* SettingsView.swift */; };
 		82B7A1952CCE9A910029878B /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 82B7A1942CCE9A910029878B /* Splash */; };
 		82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1962CCEA1F10029878B /* Tasks.swift */; };
 		82B8EB752C99560C00ACC4CE /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 82B8EB742C99560C00ACC4CE /* llama */; };
-		82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82D33A7C2CA4172300D0D58F /* EditorView.swift */; };
 		8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */; };
-		8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83782AC328BD0096AF73 /* ContentView.swift */; };
 		8A1C837B2AC328BE0096AF73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C837A2AC328BE0096AF73 /* Assets.xcassets */; };
 		8A39BE0A2AC7601100BFEB40 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A39BE092AC7601000BFEB40 /* Accelerate.framework */; };
 /* End PBXBuildFile section */
@@ -36,26 +31,16 @@
 
 /* Begin PBXFileReference section */
 		549479CA2AC9E16000E0F78B /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
-		827E72AC2C8EE7AF00E3FD16 /* GlassButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlassButton.swift; sourceTree = "<group>"; };
-		827E72AE2C8EEAD600E3FD16 /* TransparentTextEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentTextEditor.swift; sourceTree = "<group>"; };
 		82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = avocadointeligence.swiftui.entitlements; sourceTree = "<group>"; };
-		82B7A1912CCD58F20029878B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		82B7A1962CCEA1F10029878B /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tasks.swift; sourceTree = "<group>"; };
-		82D33A7C2CA4172300D0D58F /* EditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditorView.swift; sourceTree = "<group>"; };
 		82D33A802CA4391A00D0D58F /* AvocadiInteligence-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "AvocadiInteligence-Info.plist"; sourceTree = "<group>"; };
 		8A1C83732AC328BD0096AF73 /* AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = llama_swiftuiApp.swift; sourceTree = "<group>"; };
-		8A1C83782AC328BD0096AF73 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8A1C837A2AC328BE0096AF73 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8A39BE092AC7601000BFEB40 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		8242217B2CCFD32600B54C75 /* Animations */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Animations;
-			sourceTree = "<group>";
-		};
 		82854C132CA6BA8C0010F308 /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Resources;
@@ -66,7 +51,17 @@
 			path = ChatCompletion;
 			sourceTree = "<group>";
 		};
-		82B7A17C2CCD4A9D0029878B /* Assistant */ = {
+		82E1A2832CD3E73D00DFE37C /* Views */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Views;
+			sourceTree = "<group>";
+		};
+		82E1A2872CD3E8F400DFE37C /* Localization */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Localization;
+			sourceTree = "<group>";
+		};
+		82E1A2B12CD3F35200DFE37C /* Assistant */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Assistant;
 			sourceTree = "<group>";
@@ -92,7 +87,6 @@
 			isa = PBXGroup;
 			children = (
 				82D33A802CA4391A00D0D58F /* AvocadiInteligence-Info.plist */,
-				8A907F312AC7134E006146EA /* llama.cpp.swift */,
 				8A1C83752AC328BD0096AF73 /* avocadointeligence.swiftui */,
 				8A1C83742AC328BD0096AF73 /* Products */,
 				8A39BE082AC7601000BFEB40 /* Frameworks */,
@@ -110,12 +104,13 @@
 		8A1C83752AC328BD0096AF73 /* avocadointeligence.swiftui */ = {
 			isa = PBXGroup;
 			children = (
+				82E1A2872CD3E8F400DFE37C /* Localization */,
+				82E1A2832CD3E73D00DFE37C /* Views */,
 				82B7A1962CCEA1F10029878B /* Tasks.swift */,
 				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */,
 				8A9F7C4B2AC332DC008AE1EA /* Models */,
-				8A9F7C4A2AC332BF008AE1EA /* UI */,
 				8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */,
 				8A1C837A2AC328BE0096AF73 /* Assets.xcassets */,
 			);
@@ -131,30 +126,10 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8A907F312AC7134E006146EA /* llama.cpp.swift */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = llama.cpp.swift;
-			sourceTree = "<group>";
-		};
-		8A9F7C4A2AC332BF008AE1EA /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				8242217B2CCFD32600B54C75 /* Animations */,
-				82B7A1912CCD58F20029878B /* SettingsView.swift */,
-				82B7A17C2CCD4A9D0029878B /* Assistant */,
-				82D33A7C2CA4172300D0D58F /* EditorView.swift */,
-				8A1C83782AC328BD0096AF73 /* ContentView.swift */,
-				827E72AC2C8EE7AF00E3FD16 /* GlassButton.swift */,
-				827E72AE2C8EEAD600E3FD16 /* TransparentTextEditor.swift */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
 		8A9F7C4B2AC332DC008AE1EA /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				82E1A2B12CD3F35200DFE37C /* Assistant */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -176,10 +151,11 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				8242217B2CCFD32600B54C75 /* Animations */,
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
-				82B7A17C2CCD4A9D0029878B /* Assistant */,
+				82E1A2832CD3E73D00DFE37C /* Views */,
+				82E1A2872CD3E8F400DFE37C /* Localization */,
+				82E1A2B12CD3F35200DFE37C /* Assistant */,
 			);
 			name = AvocadiInteligence;
 			packageProductDependencies = (
@@ -244,12 +220,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				827E72AD2C8EE7AF00E3FD16 /* GlassButton.swift in Sources */,
-				82B7A1922CCD58F50029878B /* SettingsView.swift in Sources */,
-				8A1C83792AC328BD0096AF73 /* ContentView.swift in Sources */,
 				82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */,
-				82D33A7D2CA4172500D0D58F /* EditorView.swift in Sources */,
-				827E72AF2C8EEAD600E3FD16 /* TransparentTextEditor.swift in Sources */,
 				8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -262,6 +233,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -326,6 +298,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";

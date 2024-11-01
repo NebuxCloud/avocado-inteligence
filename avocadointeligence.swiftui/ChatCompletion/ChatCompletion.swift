@@ -1,23 +1,53 @@
 import Foundation
+import SwiftUI
 
 // Chat template protocol for formatting messages
 protocol ChatTemplate {
     func formatMessages(_ messages: [ChatMessage]) -> String
 }
 
-class ChatMessage: ObservableObject {
-    let content: String
+
+class ChatMessage: ObservableObject, Identifiable, Codable {
+    let id: UUID // Asegurarse de que el id sea codificable
+    @Published var content: String
     let role: Role
+    let date: Date
+    @Published var isLoading: Bool // Nueva propiedad para indicar si el mensaje está en proceso de carga
     
-    init(content: String, role: Role) {
+    init(id: UUID = UUID(), content: String, role: Role, date: Date = Date(), isLoading: Bool = false) {
+        self.id = id
         self.content = content
         self.role = role
+        self.date = date
+        self.isLoading = isLoading
     }
     
-    enum Role {
+    enum Role: String, Codable {
         case user
         case assistant
         case system
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case id, content, role, date, isLoading
+    }
+    
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.content = try container.decode(String.self, forKey: .content)
+        self.role = try container.decode(Role.self, forKey: .role)
+        self.date = try container.decode(Date.self, forKey: .date) // Decodificar date
+        self.isLoading = try container.decodeIfPresent(Bool.self, forKey: .isLoading) ?? false // Decodificar isLoading, por defecto en false
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(id, forKey: .id)
+        try container.encode(content, forKey: .content)
+        try container.encode(role, forKey: .role)
+        try container.encode(date, forKey: .date) // Codificar date
+        try container.encode(isLoading, forKey: .isLoading) // Codificar isLoading
     }
 }
 
