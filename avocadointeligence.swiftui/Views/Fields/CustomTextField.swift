@@ -3,7 +3,7 @@ import SwiftUI
 struct CustomTextField: View {
     @Binding var input: String
     @Binding var isLoading: Bool
-    var placeholder: String = "Message..."
+    var placeholder: String = NSLocalizedString("message_placeholder", comment: "Placeholder for message input")
     var send: () -> Void
     var stopLoading: () -> Void // Acción para parar el loading
     
@@ -30,7 +30,7 @@ struct CustomTextField: View {
                         send()
                     }
                 } label: {
-                    Image(systemName: isLoading ? "xmark.circle.fill" : "arrow.up.circle.fill")
+                    Image(systemName: isLoading ? "stop.fill" : "arrow.up.circle.fill")
                         .font(.title)
                         .foregroundColor(isLoading ? .red : (input.isEmpty ? .gray : .blue))
                 }
@@ -40,7 +40,7 @@ struct CustomTextField: View {
             }
             .padding(.horizontal, 10)
             .padding(.vertical, 4) // Ajustamos el padding vertical
-            .background(Color.white.opacity(isLoading ? 0.5 : 1.0)) // Fondo más claro cuando está cargando
+            .background(Color(UIColor.systemBackground).opacity(isLoading ? 0.5 : 1.0)) // Fondo ajustable para modo oscuro
             .cornerRadius(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 16)

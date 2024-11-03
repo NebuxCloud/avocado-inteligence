@@ -49,23 +49,22 @@ actor LlamaContext {
         
         let randomSeed = UInt32(Date().timeIntervalSince1970)
         
-        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_k(40));
-        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_p(0.9, 1));
-        llama_sampler_chain_add(self.sampling, llama_sampler_init_temp(0.3))
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_k(10));
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_top_p(0.8, 1));
+        llama_sampler_chain_add(self.sampling, llama_sampler_init_temp(0.1))
         llama_sampler_chain_add(self.sampling, llama_sampler_init_dist(randomSeed))
-
         
         let n_vocab: Int32 = llama_n_vocab(context)
         let special_eos_id: llama_token = llama_token_eos(context)
         let linefeed_id: llama_token = llama_token_nl(context)
 
-        let penalty_last_n: Int32 = 5
-        let penalty_repeat: Float = 0.8
-        let penalty_freq: Float = 0.5
-        let penalty_present: Float = 0.3
+        let penalty_last_n: Int32 = 10
+        let penalty_repeat: Float = 1.0
+        let penalty_freq: Float = 0.7
+        let penalty_present: Float = 0.5
         let penalize_nl: Bool = true
-        let ignore_eos: Bool = true
-
+        let ignore_eos: Bool = false
+        
         let penaltiesSampler = llama_sampler_init_penalties(
             n_vocab,
             special_eos_id,

@@ -2,42 +2,46 @@ import SwiftUI
 
 struct ConversationView: View {
     @ObservedObject var conversation: Conversation
-    @State private var isKeyboardVisible = false // Rastrea el estado del teclado
-    
+    @State private var isKeyboardVisible = false
+    @Binding var refreshTrigger: Bool
+    var setScrollToEndAction: ((@escaping () -> Void) -> Void)? // Callback to set scroll action
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 10) {
                     ForEach(conversation.messages) { message in
                         MessageView(message: message)
-                            .id(message.id.hashValue ^ message.content.hashValue)
+                            .id(message.id)
                     }
                     
                     Color.clear
                         .frame(height: 1)
-                        .id("EndOfConversation") 
+                        .id("EndOfConversation") // Marker for the end of the conversation
                 }
                 .padding()
+                .onAppear {
+                    // Set the scroll action callback when the view appears
+                    setScrollToEndAction? {
+                        scrollToEnd(proxy: proxy)
+                    }
+                    scrollToEnd(proxy: proxy)
+                }
                 .onChange(of: conversation.messages.count) { _ in
                     scrollToEnd(proxy: proxy)
                 }
-                .onAppear {
+                .onChange(of: refreshTrigger) { _ in
                     scrollToEnd(proxy: proxy)
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)) { _ in
-                    isKeyboardVisible = true
-                    scrollToEnd(proxy: proxy)
-                }
-                .onReceive(NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)) { _ in
-                    isKeyboardVisible = false
                 }
             }
         }
     }
     
     private func scrollToEnd(proxy: ScrollViewProxy) {
-        withAnimation {
-            proxy.scrollTo("EndOfConversation", anchor: .bottom)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            withAnimation {
+                proxy.scrollTo("EndOfConversation", anchor: .bottom)
+            }
         }
     }
 }

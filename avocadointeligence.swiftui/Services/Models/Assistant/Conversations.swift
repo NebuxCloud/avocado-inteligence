@@ -19,7 +19,7 @@ class Conversations: ObservableObject {
     }
     
     func addEmptyConversation() -> Conversation {
-        let newConversation = Conversation(title: "New Conversation", date: Date(), messages: [])
+        let newConversation = Conversation(title: "", date: Date(), messages: [])
         conversations.append(newConversation)
         saveToUserDefaults()
         observeConversation(newConversation)

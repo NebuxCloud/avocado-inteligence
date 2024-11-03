@@ -2,56 +2,64 @@ import SwiftUI
 
 struct MainView: View {
     @State private var isMenuVisible = false
-    @State private var menuContent: AnyView? = nil
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass // Detecta el tipo de dispositivo
+    @State private var menuContent: AnyView? = AnyView(SideMenuContentView()) // Ensure it's not nil
+    @EnvironmentObject var sharedData: SharedData // Access SharedData
 
     var body: some View {
         ZStack {
-            Color.clear // Fondo principal transparente
-
-            TabView {
+            // Main content
+            TabView(selection: $sharedData.host) { // Use host as TabView selection
                 AssistantView(isMenuVisible: $isMenuVisible, menuContent: $menuContent)
                     .tabItem {
                         Label(NSLocalizedString("tabitem.assistant", comment: ""), systemImage: "message")
                     }
+                    .tag("assistant") // Assign a tag to the tab
 
                 ToolsView(isMenuVisible: $isMenuVisible, menuContent: $menuContent)
                     .tabItem {
                         Label(NSLocalizedString("tabitem.tools", comment: ""), systemImage: "wand.and.stars")
                     }
-            }
-            .background(
-                VStack {
-                    Spacer()
-                    Color(UIColor.systemGray5)
-                        .frame(height: 50) // Ajusta la altura según prefieras
-                }
-                .edgesIgnoringSafeArea(.bottom)
-            )
-            .onAppear {
-                let appearance = UITabBarAppearance()
-                appearance.configureWithOpaqueBackground()
-                appearance.backgroundColor = UIColor.systemGray6
-                
-                appearance.shadowImage = UIImage()
-                appearance.backgroundImage = UIImage()
+                    .tag("tools") // Assign a tag to ToolsView matching the host
+                    
 
-                UITabBar.appearance().standardAppearance = appearance
-                if #available(iOS 15.0, *) {
-                    UITabBar.appearance().scrollEdgeAppearance = appearance
-                }
+                SettingsView()
+                    .tabItem {
+                        Label(NSLocalizedString("tabitem.settings", comment: ""), systemImage: "gear")
+                    }
+                    .tag("settings")
+            }
+            .disabled(isMenuVisible) // Disable interactions when the menu is visible
+            .blur(radius: isMenuVisible ? 5 : 0) // Apply blur when the menu is visible
+
+            // Semi-transparent background
+            if isMenuVisible {
+                Color.black.opacity(0.3)
+                    .edgesIgnoringSafeArea(.all)
+                    .onTapGesture {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isMenuVisible = false
+                        }
+                    }
             }
 
-            if isMenuVisible, let content = menuContent {
-                SideMenuView(isMenuVisible: $isMenuVisible, content: content)
-                    .transition(.move(edge: .leading))
-                    .animation(.easeInOut, value: isMenuVisible)
+            // Side menu
+            SideMenuView(isMenuVisible: $isMenuVisible, content: menuContent!)
+                // Offset and animation handled inside SideMenuView
+        }
+        .onChange(of: sharedData.host) { newHost in // Observe changes to host
+            if newHost == "tools" {
+                withAnimation {
+                    isMenuVisible = false // Close the menu if it was open
+                }
             }
         }
+        .edgesIgnoringSafeArea(.all)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    isMenuVisible.toggle()
+                    withAnimation(.easeInOut(duration: 0.5)) {
+                        isMenuVisible.toggle()
+                    }
                 }) {
                     Image(systemName: "line.horizontal.3")
                 }

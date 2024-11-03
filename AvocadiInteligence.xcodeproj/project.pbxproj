@@ -8,13 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		549479CB2AC9E16000E0F78B /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 549479CA2AC9E16000E0F78B /* Metal.framework */; };
+		82A586642CD55DE300FA6368 /* TextShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 82A5865A2CD55DE300FA6368 /* TextShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		82A586702CD55E5900FA6368 /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 82A5866F2CD55E5900FA6368 /* llama */; };
 		82B7A1952CCE9A910029878B /* Splash in Frameworks */ = {isa = PBXBuildFile; productRef = 82B7A1942CCE9A910029878B /* Splash */; };
-		82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82B7A1962CCEA1F10029878B /* Tasks.swift */; };
 		82B8EB752C99560C00ACC4CE /* llama in Frameworks */ = {isa = PBXBuildFile; productRef = 82B8EB742C99560C00ACC4CE /* llama */; };
 		8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */; };
 		8A1C837B2AC328BE0096AF73 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A1C837A2AC328BE0096AF73 /* Assets.xcassets */; };
 		8A39BE0A2AC7601100BFEB40 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A39BE092AC7601000BFEB40 /* Accelerate.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		82A586622CD55DE300FA6368 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8A1C836B2AC328BD0096AF73 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 82A586592CD55DE300FA6368;
+			remoteInfo = TextShareExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		82A1D55D2C92E8D3001B8246 /* Embed Foundation Extensions */ = {
@@ -23,6 +34,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				82A586642CD55DE300FA6368 /* TextShareExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -32,7 +44,7 @@
 /* Begin PBXFileReference section */
 		549479CA2AC9E16000E0F78B /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
 		82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = avocadointeligence.swiftui.entitlements; sourceTree = "<group>"; };
-		82B7A1962CCEA1F10029878B /* Tasks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tasks.swift; sourceTree = "<group>"; };
+		82A5865A2CD55DE300FA6368 /* TextShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TextShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		82D33A802CA4391A00D0D58F /* AvocadiInteligence-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "AvocadiInteligence-Info.plist"; sourceTree = "<group>"; };
 		8A1C83732AC328BD0096AF73 /* AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = llama_swiftuiApp.swift; sourceTree = "<group>"; };
@@ -40,35 +52,90 @@
 		8A39BE092AC7601000BFEB40 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		82A586652CD55DE300FA6368 /* Exceptions for "TextShareExtension" folder in "TextShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 82A586592CD55DE300FA6368 /* TextShareExtension */;
+		};
+		82A5866A2CD55E0400FA6368 /* Exceptions for "Views" folder in "TextShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Fields/CustomTextField.swift,
+			);
+			target = 82A586592CD55DE300FA6368 /* TextShareExtension */;
+		};
+		82A5866C2CD55E1600FA6368 /* Exceptions for "Services" folder in "TextShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ChatCompletion/ChatCompletion.swift,
+				ChatCompletion/LibLlama.swift,
+				ChatCompletion/LlamaState.swift,
+				DownloadManager/DownloadManager.swift,
+				Tools/WriteTools.swift,
+			);
+			target = 82A586592CD55DE300FA6368 /* TextShareExtension */;
+		};
+		82A5867D2CD566F100FA6368 /* Exceptions for "Localization" folder in "TextShareExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Localizable.strings",
+			);
+			target = 82A586592CD55DE300FA6368 /* TextShareExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		82854C132CA6BA8C0010F308 /* Resources */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Resources;
 			sourceTree = "<group>";
 		};
-		82B7A1782CCD2E5F0029878B /* ChatCompletion */ = {
+		82A5862E2CD501C400FA6368 /* Services */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ChatCompletion;
+			exceptions = (
+				82A5866C2CD55E1600FA6368 /* Exceptions for "Services" folder in "TextShareExtension" target */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		82A5865B2CD55DE300FA6368 /* TextShareExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				82A586652CD55DE300FA6368 /* Exceptions for "TextShareExtension" folder in "TextShareExtension" target */,
+			);
+			path = TextShareExtension;
 			sourceTree = "<group>";
 		};
 		82E1A2832CD3E73D00DFE37C /* Views */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				82A5866A2CD55E0400FA6368 /* Exceptions for "Views" folder in "TextShareExtension" target */,
+			);
 			path = Views;
 			sourceTree = "<group>";
 		};
 		82E1A2872CD3E8F400DFE37C /* Localization */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				82A5867D2CD566F100FA6368 /* Exceptions for "Localization" folder in "TextShareExtension" target */,
+			);
 			path = Localization;
-			sourceTree = "<group>";
-		};
-		82E1A2B12CD3F35200DFE37C /* Assistant */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Assistant;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		82A586572CD55DE300FA6368 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82A586702CD55E5900FA6368 /* llama in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8A1C83702AC328BD0096AF73 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -88,6 +155,7 @@
 			children = (
 				82D33A802CA4391A00D0D58F /* AvocadiInteligence-Info.plist */,
 				8A1C83752AC328BD0096AF73 /* avocadointeligence.swiftui */,
+				82A5865B2CD55DE300FA6368 /* TextShareExtension */,
 				8A1C83742AC328BD0096AF73 /* Products */,
 				8A39BE082AC7601000BFEB40 /* Frameworks */,
 			);
@@ -97,6 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				8A1C83732AC328BD0096AF73 /* AI.app */,
+				82A5865A2CD55DE300FA6368 /* TextShareExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,13 +173,11 @@
 		8A1C83752AC328BD0096AF73 /* avocadointeligence.swiftui */ = {
 			isa = PBXGroup;
 			children = (
+				82A5862E2CD501C400FA6368 /* Services */,
 				82E1A2872CD3E8F400DFE37C /* Localization */,
 				82E1A2832CD3E73D00DFE37C /* Views */,
-				82B7A1962CCEA1F10029878B /* Tasks.swift */,
-				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
 				82854C132CA6BA8C0010F308 /* Resources */,
 				82A1D5622C92E9AC001B8246 /* avocadointeligence.swiftui.entitlements */,
-				8A9F7C4B2AC332DC008AE1EA /* Models */,
 				8A1C83762AC328BD0096AF73 /* llama_swiftuiApp.swift */,
 				8A1C837A2AC328BE0096AF73 /* Assets.xcassets */,
 			);
@@ -126,17 +193,32 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		8A9F7C4B2AC332DC008AE1EA /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				82E1A2B12CD3F35200DFE37C /* Assistant */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		82A586592CD55DE300FA6368 /* TextShareExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 82A586662CD55DE300FA6368 /* Build configuration list for PBXNativeTarget "TextShareExtension" */;
+			buildPhases = (
+				82A586562CD55DE300FA6368 /* Sources */,
+				82A586572CD55DE300FA6368 /* Frameworks */,
+				82A586582CD55DE300FA6368 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				82A5865B2CD55DE300FA6368 /* TextShareExtension */,
+			);
+			name = TextShareExtension;
+			packageProductDependencies = (
+				82A5866F2CD55E5900FA6368 /* llama */,
+			);
+			productName = TextShareExtension;
+			productReference = 82A5865A2CD55DE300FA6368 /* TextShareExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		8A1C83722AC328BD0096AF73 /* AvocadiInteligence */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8A1C83812AC328BE0096AF73 /* Build configuration list for PBXNativeTarget "AvocadiInteligence" */;
@@ -149,13 +231,13 @@
 			buildRules = (
 			);
 			dependencies = (
+				82A586632CD55DE300FA6368 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				82854C132CA6BA8C0010F308 /* Resources */,
-				82B7A1782CCD2E5F0029878B /* ChatCompletion */,
+				82A5862E2CD501C400FA6368 /* Services */,
 				82E1A2832CD3E73D00DFE37C /* Views */,
 				82E1A2872CD3E8F400DFE37C /* Localization */,
-				82E1A2B12CD3F35200DFE37C /* Assistant */,
 			);
 			name = AvocadiInteligence;
 			packageProductDependencies = (
@@ -173,9 +255,12 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1600;
+				LastSwiftUpdateCheck = 1610;
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
+					82A586592CD55DE300FA6368 = {
+						CreatedOnToolsVersion = 16.1;
+					};
 					8A1C83722AC328BD0096AF73 = {
 						CreatedOnToolsVersion = 15.0;
 						LastSwiftMigration = 1500;
@@ -188,6 +273,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = 8A1C836A2AC328BD0096AF73;
 			packageReferences = (
@@ -200,11 +286,19 @@
 			projectRoot = "";
 			targets = (
 				8A1C83722AC328BD0096AF73 /* AvocadiInteligence */,
+				82A586592CD55DE300FA6368 /* TextShareExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		82A586582CD55DE300FA6368 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8A1C83712AC328BD0096AF73 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -216,18 +310,84 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		82A586562CD55DE300FA6368 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8A1C836F2AC328BD0096AF73 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				82B7A1972CCEA1F30029878B /* Tasks.swift in Sources */,
 				8A1C83772AC328BD0096AF73 /* llama_swiftuiApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		82A586632CD55DE300FA6368 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 82A586592CD55DE300FA6368 /* TextShareExtension */;
+			targetProxy = 82A586622CD55DE300FA6368 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		82A586672CD55DE300FA6368 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9R6HNVBCQ8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TextShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TextShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nebuxcloud.avocadointelligence.TextShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		82A586682CD55DE300FA6368 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9R6HNVBCQ8;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TextShareExtension/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TextShareExtension;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nebuxcloud.avocadointelligence.TextShareExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		8A1C837F2AC328BE0096AF73 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -373,7 +533,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nebuxcloud.avocadointelligence;
 				PRODUCT_NAME = AI;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -407,7 +567,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.nebuxcloud.avocadointelligence;
 				PRODUCT_NAME = AI;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator xros xrsimulator";
@@ -421,6 +581,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		82A586662CD55DE300FA6368 /* Build configuration list for PBXNativeTarget "TextShareExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				82A586672CD55DE300FA6368 /* Debug */,
+				82A586682CD55DE300FA6368 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8A1C836E2AC328BD0096AF73 /* Build configuration list for PBXProject "AvocadiInteligence" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -453,6 +622,11 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		82A5866F2CD55E5900FA6368 /* llama */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 82B8EB732C99560C00ACC4CE /* XCLocalSwiftPackageReference "deps/llama.cpp" */;
+			productName = llama;
+		};
 		82B7A1942CCE9A910029878B /* Splash */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Splash;

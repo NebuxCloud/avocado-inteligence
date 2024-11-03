@@ -3,9 +3,11 @@ import Splash
 
 struct MessageView: View {
     let message: ChatMessage
+    var hideHeader: Bool = false
+
     @State private var showCopiedAlert = false
     @State private var ellipsis = ""
-
+    
     var isUserMessage: Bool {
         message.role == .user
     }
@@ -21,24 +23,25 @@ struct MessageView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(roleTitle)
-                        .font(.caption)
-                        .fontWeight(.bold)
-                        .foregroundColor(.gray)
-                    
-                    Text(message.date, formatter: dateFormatter) // Mostrar fecha y hora
-                        .font(.caption2)
-                        .foregroundColor(.gray)
+                if !hideHeader {
+                    HStack {
+                        Text(roleTitle)
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(.gray)
+                        
+                        Text(message.date, formatter: dateFormatter) // Display date and time
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                    }
+                    .padding(.bottom, 2)
                 }
-                .padding(.bottom, 2)
-                
-                // Mostrar el contenido del mensaje con puntos suspensivos animados si está cargando
+                // Display the message content with animated ellipsis if loading
                 if let highlightedContent = processMarkdownWithCode(for: message.content + (message.isLoading ? ellipsis : "")) {
                     Text(highlightedContent)
                         .padding(16)
-                        .foregroundColor(isUserMessage ? .white : .black)
-                        .background(isUserMessage ? Color.blue : Color.gray.opacity(0.15))
+                        .foregroundColor(isUserMessage ? .white : .primary)
+                        .background(isUserMessage ? Color.green : Color(UIColor.secondarySystemBackground))
                         .cornerRadius(16)
                         .contextMenu {
                             Button(action: copyMessage) {
@@ -50,6 +53,7 @@ struct MessageView: View {
                                 startEllipsisAnimation()
                             }
                         }
+                        .animation(.easeInOut(duration: 0.3), value: highlightedContent) // Apply easeInOut animation
                 }
             }
             .frame(maxWidth: isUserMessage ? 300 : .infinity, alignment: isUserMessage ? .trailing : .leading)
@@ -88,10 +92,12 @@ struct MessageView: View {
     private func startEllipsisAnimation() {
         Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
             DispatchQueue.main.async {
-                if ellipsis.count >= 3 {
-                    ellipsis = ""
-                } else {
-                    ellipsis += "."
+                withAnimation(.easeInOut(duration: 0.3)) {
+                    if ellipsis.count >= 3 {
+                        ellipsis = ""
+                    } else {
+                        ellipsis += "."
+                    }
                 }
             }
         }
@@ -121,7 +127,7 @@ struct MessageView: View {
         return attributedString
     }
     
-    // Formateador de fecha personalizado
+    // Custom date formatter
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateStyle = .short

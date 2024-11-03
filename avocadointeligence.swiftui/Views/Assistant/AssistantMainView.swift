@@ -6,12 +6,14 @@ struct AssistantView: View {
     @State private var conversations: Conversations?
     @State private var selectedConversation: Conversation?
     @State private var isLoading = true
-    @State private var newMessageText: String = "" // Estado para el mensaje nuevo
+    @State private var newMessageText: String = "" // State for new message
     @State private var isGeneratingMessage: Bool = false
     @EnvironmentObject var llamaState: LlamaState
-    
+    @State private var refreshTrigger = false
+    @State private var scrollToEndAction: (() -> Void)?
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 if isLoading {
                     ProgressView(NSLocalizedString("loading_conversations", comment: "Loading conversations indicator"))
@@ -21,7 +23,11 @@ struct AssistantView: View {
                         }
                 } else {
                     if let conversation = selectedConversation {
-                        ConversationView(conversation: conversation)
+                        ConversationView(conversation: conversation,
+                                         refreshTrigger: $refreshTrigger,
+                                         setScrollToEndAction: { action in
+                            self.scrollToEndAction = action // Set the scroll action
+                        })
                         
                         HStack(alignment: .bottom) {
                             CustomTextField(input: $newMessageText, isLoading: $isGeneratingMessage, send: sendMessage, stopLoading: stopMessage)
@@ -35,10 +41,8 @@ struct AssistantView: View {
                     }
                 }
             }
-            .navigationBarTitle(
-                selectedConversation?.title.isEmpty == false ? selectedConversation!.title : NSLocalizedString("assistant_title", comment: "Title of the assistant view"),
-                displayMode: .inline
-            )
+            .id(refreshTrigger)
+            .navigationBarTitle(selectedConversation?.title ?? NSLocalizedString("assistant_title", comment: "Title of the assistant view"), displayMode: .inline)
             .navigationBarItems(
                 leading: Button(action: openMenu) {
                     Image(systemName: "line.horizontal.3")
@@ -52,12 +56,25 @@ struct AssistantView: View {
                 }
                 .disabled(conversations?.conversations.isEmpty == false && selectedConversation?.messages.isEmpty == true)
             )
-            .contentShape(Rectangle()) // Hace que el área de contenido sea táctil
+            .contentShape(Rectangle()) // Makes the content area tappable
             .onTapGesture {
-                // Aquí cerramos el teclado al tocar fuera del TextField
                 hideKeyboard()
             }
+            .onAppear{
+                menuContent = AnyView(
+                    AssistantMenuContent(
+                        selectedConversation: $selectedConversation,
+                        conversations: $conversations,
+                        refreshTrigger: $refreshTrigger
+                    )
+                )
+            }
         }
+    }
+
+    
+    private func refreshView() {
+        refreshTrigger.toggle()
     }
 
     private func loadConversations() {
@@ -67,7 +84,7 @@ struct AssistantView: View {
             if let lastConversation = self.conversations?.conversations.last {
                 self.selectedConversation = lastConversation
             } else {
-                self.addNewConversation() // Crear nueva conversación si no hay ninguna
+                self.addNewConversation() // Create a new conversation if none exist
             }
             self.isLoading = false
         }
@@ -80,12 +97,6 @@ struct AssistantView: View {
     
     private func openMenu() {
         if let conversations = conversations {
-            menuContent = AnyView(
-                AssistantMenuContent(
-                    selectedConversation: $selectedConversation,
-                    conversations: $conversations
-                )
-            )
             isMenuVisible = true
         }
     }
@@ -96,39 +107,49 @@ struct AssistantView: View {
         
         let chatCompletion = LlamaChatCompletion(llamaState: llamaState)
         
-        // Crear el mensaje inicial del asistente vacío y añadirlo a la conversación
         let assistantMsg = ChatMessage(content: "", role: .assistant)
         assistantMsg.isLoading = true
-
-        selectedConversation?.appendMessage(assistantMsg)
         
-        // Resetear el campo de texto
+        // Append assistantMsg once
+        selectedConversation?.appendMessage(assistantMsg)
         newMessageText = ""
         
-        // Ejecutar en una tarea asíncrona con MainActor
         Task { @MainActor in
             await chatCompletion.chatCompletion(
                 messages: selectedConversation?.messages ?? [],
                 resultHandler: { token in
-                    // Actualizar el contenido en tiempo real eliminando y reinsertando el mensaje
-                    if let assistantIndex = selectedConversation?.messages.firstIndex(where: { $0.id == assistantMsg.id }) {
-                        selectedConversation?.messages.remove(at: assistantIndex)
-                        assistantMsg.content += token
-                        assistantMsg.isLoading = true
-                        selectedConversation?.messages.insert(assistantMsg, at: assistantIndex)
-                    }
+                    // Append tokens directly to assistantMsg's content
+                    assistantMsg.content += token
+                    scrollToEndAction?()
+                    UIImpactFeedbackGenerator(style: .light).impactOccurred()
                 },
                 onComplete: {
-                    assistantMsg.isLoading = false
-                    isGeneratingMessage = false
-                    conversations?.saveToUserDefaults()
+                    Task {
+                        if var userMessages = selectedConversation?.messages, userMessages.count == 2 {
+                            let systemMessage = ChatMessage(content: "Generate a title for this conversation in the same language as the user.", role: .system)
+                            userMessages.append(systemMessage)
+                            selectedConversation?.title = "" // Clear the title
+                            
+                            await chatCompletion.chatCompletion(
+                                messages: userMessages,
+                                resultHandler: { token in
+                                    selectedConversation?.title += token
+                                },
+                                onComplete: {
+                                    self.refreshView()
+                                }
+                            )
+                        }
+                        assistantMsg.isLoading = false
+                        isGeneratingMessage = false
+                        conversations?.saveToUserDefaults()
+                    }
                 }
             )
         }
     }
     
     private func stopMessage() {
-        // Implementar la lógica para detener la generación de mensajes en llamaState si es soportado
         Task { @MainActor in
             await llamaState.stop()
             isGeneratingMessage = false
@@ -136,7 +157,7 @@ struct AssistantView: View {
     }
 }
 
-// Extensión para ocultar el teclado
+// Extension to hide the keyboard
 extension View {
     func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
