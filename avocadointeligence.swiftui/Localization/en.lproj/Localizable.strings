@@ -1,0 +1,101 @@
+// Loading messages and initial setup
+"loading_model" = "Loading model...";
+"loading_conversations" = "Loading conversations...";
+"select_or_create_conversation" = "Select or create a conversation from the menu.";
+"add_message" = "Add Message";
+"add_new_conversation" = "Add New Conversation";
+
+// Main interface elements (Tabs and Roles)
+"tools" = "Tools";
+"settings" = "Settings";
+"tabitem.assistant" = "Assistant";
+"tabitem.tools" = "Tools";
+"tabitem.settings" = "Settings";
+"user_role" = "User";
+"assistant_role" = "Assistant";
+
+// Titles and messages in the conversations section
+"assistant_title" = "Assistant";
+"your_message" = "Your message";
+"conversations_title" = "Conversations";
+"no_conversations_available" = "No conversations available.";
+
+// Message copying functionalities
+"copy_message" = "Copy";
+"copied_alert" = "Copied";
+"copied_alert_description" = "Alert shown when a message is copied";
+
+// Model configuration in settings
+"model_selection" = "Model Selection";
+"selected_model" = "Selected Model";
+"none" = "None";
+"download_new_models" = "Download New Models";
+"settings" = "Settings";
+
+// App description and external links
+"about" = "About";
+"avocado_description" = "Avocado Intelligence is your local AI-powered assistant for text editing and quick responses.";
+"need_solution" = "Need your own solution?";
+"open_source" = "We ❤️ Open Source";
+"avocado_url" = "https://nebux.cloud/?utm_source=avocado-intelligence&utm_medium=ios-app&utm_campaign=about-section&utm_content=link";
+"github_url" = "https://github.com/NebuxCloud/avocado-inteligence";
+"model_selection_explanation" = "Selecting a model allows you to adjust the app's precision and speed to better suit your needs. You can choose between faster models or more detailed ones.";
+"model_benefit_description" = "Selecting models adjusts the app’s responsiveness and accuracy by downloading the best-suited models for different tasks.";
+"avocado_description" = "Avocado Intelligence uses artificial intelligence to provide optimal results. Switching models lets you fine-tune the app’s accuracy and performance based on your preferences.";
+
+// Additional model information and performance
+"model_info" = "Larger models are more intelligent but slower; smaller models are faster but may be less accurate.";
+"sort_by_size" = "Sort by Size:";
+"largest_first" = "Largest First";
+"smallest_first" = "Smallest First";
+"download" = "Download";
+"search_models" = "Search models";
+"download_models" = "Download Models";
+"select_model" = "Select Model";
+"default_models" = "Default Local Models";
+"downloaded_models" = "Downloaded Models";
+"selected" = "(Selected)";
+
+// Editing and completion options
+"edit" = "Edit";
+"done" = "Done";
+
+// Memory usage and performance messages
+"memory_usage" = "%d%% memory usage";
+"cpu_usage" = "%d%% cpu usage";
+"optimal_performance" = "Optimal performance";
+"moderate_performance" = "Moderate performance";
+"slow_performance" = "Slow performance";
+"very_slow_performance" = "Very slow performance";
+
+// Download progress messages and cancel action
+"download_progress" = "%d%%";
+"cancel_download" = "Cancel download";
+
+// Text rewriting tool styles
+"tool_romantic_caption" = "Romantic";
+"tool_professional_caption" = "Professional";
+"tool_poetic_caption" = "Poetic";
+"tool_select_style" = "Select a style";
+
+// Style descriptions for text rewriting
+"tool_romantic_prompt" = "Rewrite the text provided by the 'user' role in a deeply romantic tone, infusing it with poetic and emotional language that conveys warmth and affection. The response should only include the rewritten text, without additional explanations or introductions. Maintain the original language used in the input.";
+"tool_professional_prompt" = "Rewrite the text provided by the 'user' role in a formal, polished, and professional tone, ensuring clarity, conciseness, and an authoritative style. The response should only contain the rephrased text, with no additional commentary. Maintain the original language of the input.";
+"tool_poetic_prompt" = "Rewrite the text provided by the 'user' role in a poetic, imaginative style, adding vivid imagery and elegant phrasing that brings an artistic depth to the content. The response should be the rephrased text only, without any additional explanation or commentary. Maintain the original language of the input.";
+
+// Summary and key points tools
+"tool_summary_caption" = "Summarize";
+"tool_keypoints_caption" = "Key Points";
+"tool_summary_prompt" = "Provide a concise summary of the text provided by the 'user' role, highlighting the main ideas in a brief paragraph. The response should only contain the summary, with no additional commentary or explanations. Maintain the original language of the input.";
+"tool_keypoints_prompt" = "Identify and list the main points from the 'user' input as concise bullet points under 'Key Points.' Provide only the bullet points, with no additional text or commentary, preserving the original language and terminology of the input.";
+
+// General loading and alert messages
+"loading_text" = "Loading...";
+"copied_alert" = "Text copied to clipboard!";
+"user_role" = "User";
+"assistant_role" = "Assistant";
+"copy_message_action" = "Copy message";
+"message_placeholder" = "Please, write your message";
+
+// Share menu
+"cancel_button" = "Cancel";

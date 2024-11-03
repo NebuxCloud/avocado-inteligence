@@ -1,0 +1,102 @@
+// Mensajes de carga y configuraciones iniciales
+"loading_model" = "Cargando modelo...";
+"loading_conversations" = "Cargando conversaciones...";
+"select_or_create_conversation" = "Selecciona o crea una conversación desde el menú.";
+"add_message" = "Agregar mensaje";
+"add_new_conversation" = "Agregar nueva conversación";
+
+// Elementos de la interfaz principal (Tabs y Roles)
+"tools" = "Herramientas";
+"settings" = "Ajustes";
+"tabitem.assistant" = "Asistente";
+"tabitem.tools" = "Herramientas";
+"tabitem.settings" = "Ajustes";
+"user_role" = "Usuario";
+"assistant_role" = "Asistente";
+
+// Títulos y mensajes en la sección de conversaciones
+"assistant_title" = "Asistente";
+"your_message" = "Tu mensaje";
+"conversations_title" = "Conversaciones";
+"no_conversations_available" = "No hay conversaciones disponibles.";
+
+// Funcionalidades de copiar mensajes
+"copy_message" = "Copiar";
+"copied_alert" = "Copiado";
+"copied_alert_description" = "Alerta mostrada cuando un mensaje es copiado";
+
+// Configuración de modelo en la sección de ajustes
+"model_selection" = "Selección de modelo";
+"selected_model" = "Modelo seleccionado";
+"none" = "Ninguno";
+"download_new_models" = "Descargar nuevos modelos";
+"settings" = "Ajustes";
+
+// Descripción de la aplicación y enlaces externos
+"about" = "Acerca de";
+"avocado_description" = "Avocado Intelligence es tu asistente local impulsado por IA para edición de texto y respuestas rápidas.";
+"need_solution" = "¿Necesitas tu propia solución?";
+"open_source" = "Amamos el código abierto ❤️";
+"avocado_url" = "https://nebux.cloud/?utm_source=avocado-intelligence&utm_medium=ios-app&utm_campaign=about-section&utm_content=link";
+"github_url" = "https://github.com/NebuxCloud/avocado-inteligence";
+
+// Información adicional sobre los modelos y su rendimiento
+"model_info" = "Los modelos más grandes son más inteligentes pero más lentos; los modelos más pequeños son más rápidos, aunque menos precisos.";
+"sort_by_size" = "Ordenar por tamaño:";
+"largest_first" = "De mayor a menor";
+"smallest_first" = "De menor a mayor";
+"download" = "Descargar";
+"search_models" = "Buscar modelos";
+"download_models" = "Descargar modelos";
+"select_model" = "Seleccionar modelo";
+"default_models" = "Modelos locales predeterminados";
+"downloaded_models" = "Modelos descargados";
+"selected" = "(Seleccionado)";
+"model_selection_explanation" = "Seleccionar un modelo te permite ajustar la precisión y velocidad de la aplicación para adaptarse mejor a tus necesidades. Puedes elegir entre modelos más rápidos o más detallados.";
+"model_benefit_description" = "Seleccionar modelos ajusta la capacidad de respuesta y precisión de la aplicación descargando los mejores modelos para distintas tareas.";
+"avocado_description" = "Avocado Intelligence utiliza inteligencia artificial para ayudarte a obtener los mejores resultados. Cambiar de modelo permite ajustar la precisión y rendimiento de la app según tus preferencias.";
+
+// Opciones de edición y finalización de tareas
+"edit" = "Editar";
+"done" = "Listo";
+
+// Mensajes de rendimiento de memoria
+"memory_usage" = "%d%% de uso de memoria";
+"cpu_usage" = "%d%% de uso de cpu";
+
+"optimal_performance" = "Rendimiento óptimo";
+"moderate_performance" = "Rendimiento moderado";
+"slow_performance" = "Rendimiento lento";
+"very_slow_performance" = "Rendimiento muy lento";
+
+// Mensajes de progreso de descarga y acciones de cancelación
+"download_progress" = "%d%%";
+"cancel_download" = "Cancelar descarga";
+
+// Estilos de herramientas de reescritura
+"tool_romantic_caption" = "Romántico";
+"tool_professional_caption" = "Profesional";
+"tool_poetic_caption" = "Poético";
+"tool_select_style" = "Selecciona un estilo";
+
+// Descripciones de estilos para la reescritura de texto
+"tool_romantic_prompt" = "Reescribe el texto proporcionado por el rol 'usuario' en un tono profundamente romántico, infundiéndolo con un lenguaje poético y emocional que transmita calidez y afecto. La respuesta solo debe incluir el texto reescrito, sin explicaciones o introducciones adicionales. Mantén el idioma original del texto de entrada.";
+"tool_professional_prompt" = "Reescribe el texto proporcionado por el rol 'usuario' en un tono formal, pulido y profesional, asegurando claridad, concisión y un estilo autoritario. La respuesta solo debe contener el texto reescrito, sin comentarios adicionales. Mantén el idioma original del texto de entrada.";
+"tool_poetic_prompt" = "Reescribe el texto proporcionado por el rol 'usuario' en un estilo poético e imaginativo, agregando imágenes vívidas y un fraseo elegante que aporte una profundidad artística al contenido. La respuesta debe ser solo el texto reescrito, sin ninguna explicación o comentario adicional. Mantén el idioma original del texto de entrada.";
+
+// Herramientas de resumen y puntos clave
+"tool_summary_caption" = "Resumen";
+"tool_keypoints_caption" = "Puntos clave";
+"tool_summary_prompt" = "Proporciona un resumen conciso del texto proporcionado por el rol 'usuario', destacando las ideas principales en un breve párrafo. La respuesta solo debe contener el resumen, sin comentarios adicionales o explicaciones. Mantén el idioma original del texto de entrada.";
+"tool_keypoints_prompt" = "Identifica y enumera los puntos principales de la entrada del 'usuario' como viñetas concisas bajo 'Puntos clave'. Proporciona solo las viñetas, sin texto adicional ni comentarios, preservando el idioma y la terminología originales de la entrada.";
+
+// Mensajes generales de carga y alertas
+"loading_text" = "Cargando...";
+"copied_alert" = "¡Texto copiado al portapapeles!";
+"user_role" = "Usuario";
+"assistant_role" = "Asistente";
+"copy_message_action" = "Copiar mensaje";
+"message_placeholder" = "Por favor, escribe tu mensaje";
+
+// Compartir
+"cancel_button" = "Cancelar";
