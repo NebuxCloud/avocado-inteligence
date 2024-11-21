@@ -40,7 +40,7 @@ struct ToolSelectionView: View {
             Button(action: {
                 onCancel()  // Call the onCancel action
             }) {
-                Text("cancel_button") 
+                Text("cancel_button")
                     .foregroundColor(.red)
                     .padding()
                     .frame(maxWidth: .infinity)
@@ -52,6 +52,6 @@ struct ToolSelectionView: View {
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(20)
-        .frame(width: UIScreen.main.bounds.width * 0.85, height: 280)
+        .frame(maxWidth: .infinity, maxHeight: 400) // Adapt width to container
     }
 }

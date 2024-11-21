@@ -73,7 +73,7 @@ class ShareViewController: UIViewController {
             hostingController.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             hostingController.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             hostingController.view.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            hostingController.view.heightAnchor.constraint(equalToConstant: 300)  // Set desired height
+            hostingController.view.heightAnchor.constraint(equalToConstant: 400)  // Set desired height
         ])
         
         hostingController.didMove(toParent: self)

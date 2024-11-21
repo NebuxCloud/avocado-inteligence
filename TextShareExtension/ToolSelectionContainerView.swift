@@ -10,14 +10,6 @@ struct ToolSelectionContainerView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             if isVisible {
-                // Background overlay that detects taps to close the view
-                Color.black.opacity(0.5)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        isVisible = false
-                        onCancel()  // Trigger cancellation action
-                    }
-                
                 // Tool selection view content at the bottom
                 VStack(spacing: 15) {
                     ToolSelectionView(
@@ -36,7 +28,7 @@ struct ToolSelectionContainerView: View {
                     .cornerRadius(20, corners: [.topLeft, .topRight])  // Rounded corners at the top
                 }
                 .frame(maxWidth: .infinity)
-                .frame(height: 300)  // Set height to match hosting controller
+                .frame(height: 400)  // Set height to match hosting controller
             }
         }
     }
